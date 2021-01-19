@@ -1,0 +1,225 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style>
+			html,body{height:auto}
+
+			.mui-off-canvas-left {
+							color: #fff;
+			}
+			.title {
+				margin: 10px 15px 10px;
+				text-align: center;
+			}
+
+			.title-bar {
+				background-color: #242424 !important;
+			}
+
+			#offCanvasContentScroll {
+				padding: 55px 10px 10px 10px;
+			}
+
+			* {
+				touch-action: pan-y;
+			}
+
+			.tale-content {
+				width: auto;
+				margin-right: 10px;
+				background: #c8e8c8;
+				padding: 10px 15px;
+				border-radius: 15px;
+				font-size: 18px;
+				font-family: sans-serif;
+				line-height: 1.8;
+				/*每行字体平均分布*/
+				text-align: justify;
+			}
+
+			p {
+				font-size: 1.1em;
+				color: #000000d9;
+				margin: .1em 0;
+			}
+
+			button {
+				color: white;
+				background: #242424;
+				border-radius: 10px;
+				border-color: #ffffff36;
+			}
+
+		</style>
+	</head>
+
+	<body>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript" src="js/vue/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue/axios.min.js"></script>
+
+		<!--<div class="main mui-off-canvas-wrap mui-draggable mui-scalable">-->
+		<div class="main mui-off-canvas-wrap mui-draggable">
+		  <!-- 侧滑菜单部分 -->
+		  <aside id="offCanvasSide" class="mui-off-canvas-left">
+		    <div id="offCanvasSideScroll" class="mui-scroll-wrapper">
+		      <div class="mui-scroll">
+		        <!-- 菜单具体展示内容 -->
+				<div class="title">
+					<img src="img/xhjb.jpg"/>
+				</div>
+
+				<ul class="mui-table-view mui-table-view-chevron mui-table-view-inverted">
+					<li class="mui-table-view-cell mui-collapse">
+						<a class="mui-navigate-right" href="#">神 话</a>
+						<div class="mui-collapse-content title-bar" v-for="column in columns">
+							<button @click="getData(column.id)">{{column.title}}</button>
+						</div>
+					</li>
+
+					<li class="mui-table-view-cell mui-collapse">
+						<a class="mui-navigate-right" href="#">传 说</a>
+						<div class="mui-collapse-content title-bar" v-for="column in columns2">
+							<button @click="getData(column.id)">{{column.title}}</button>
+						</div>
+					</li>
+
+					<li class="mui-table-view-cell mui-collapse">
+						<a class="mui-navigate-right" href="#">故 事</a>
+						<div class="mui-collapse-content title-bar" v-for="column in columns3">
+							<button @click="getData(column.id)">{{column.title}}</button>
+						</div>
+					</li>
+				</ul>
+		      </div>
+		    </div>
+		  </aside>
+		  
+		  <!-- 主页面部分 -->
+		  <div class="mui-inner-wrap">
+		    <!-- 主页面标题 -->
+		    <header class="mui-bar mui-bar-nav">
+		      <a href="#offCanvasSide" class="mui-icon mui-action-menu mui-icon-bars mui-pull-left"></a>
+		      <h1 class="mui-title" style="font-weight: 700;">{{title}}</h1>
+		    </header>
+			
+		    <div id="offCanvasContentScroll" class="mui-content mui-scroll-wrapper">
+		      <div class="mui-scroll tale-content" v-show="showContent">
+				  <!-- 主界面具体展示内容 -->
+				<p v-for="paragraph in paragraphs">　　{{paragraph}}</p>
+				  <div style="text-align: center;">
+					  <p>口述人：{{narrator}}　搜集人：{{recorder}}</p>
+				  </div>
+		      </div>
+		    </div>
+			
+			<!-- 侧滑菜单弹出后的主页面遮罩 -->
+			<div class="mui-off-canvas-backdrop"></div>
+		  </div>
+		</div>
+		
+		<script type="text/javascript">
+			// 用于修改mui.min.js里面的监听方法，保证切换故事时，初始化滑块位置
+			var localFlag = false;
+
+			new Vue({
+				el: '.main',
+				data: {
+					title: '',
+					paragraphs: [],
+					narrator: '',
+					recorder: '',
+					showContent: false,
+					columns: [id='',title=''],
+					columns2: [id='',title=''],
+					columns3: [id='',title=''],
+				},
+				created: function () {
+					this.getData(1);
+					this.getMyth('神话');
+					this.getMyth2('传说');
+					this.getMyth3('故事');
+				},
+				methods: {
+					getData: function (id) {
+						const that = this;
+						axios.get("/XHJB/getTale/" + id)
+								.then(function (response) {
+									if (response.data) {
+										var data = response.data;
+										that.title = data.title;
+										that.paragraphs = data.paragraphs;
+										that.narrator = data.narrator;
+										that.recorder = data.recorder;
+										that.showContent = true;
+
+										// 切换内容时，定位到最上面
+										document.getElementsByClassName("tale-content")[0].style='transform: translate3d(0px, 0px, 0px) translateZ(0px);';
+										// 初始化滑块位置
+										localFlag = true;
+
+									} else {
+										alert('访问错误,请检查网络');
+									}
+								})
+								.catch(function (error) {
+									console.log(error);
+								});
+					},
+					getMyth: function (type) {
+						const that = this;
+						axios.get("/XHJB/getTalesByType/" + type)
+								.then(function (response) {
+									if (response.data) {
+										that.columns = response.data;
+									} else {
+										alert('访问错误,请检查网络');
+									}
+								})
+								.catch(function (error) {
+									console.log(error);
+								});
+					},
+					getMyth2: function (type) {
+						const that = this;
+						axios.get("/XHJB/getTalesByType/" + type)
+								.then(function (response) {
+									if (response.data) {
+										that.columns2 = response.data;
+									} else {
+										alert('访问错误,请检查网络');
+									}
+								})
+								.catch(function (error) {
+									console.log(error);
+								});
+					},
+					getMyth3: function (type) {
+						const that = this;
+						axios.get("/XHJB/getTalesByType/" + type)
+								.then(function (response) {
+									if (response.data) {
+										that.columns3 = response.data;
+									} else {
+										alert('访问错误,请检查网络');
+									}
+								})
+								.catch(function (error) {
+									console.log(error);
+								});
+					}
+				}
+			});
+
+			//主界面和侧滑菜单界面均支持区域滚动；
+			mui('#offCanvasSideScroll').scroll();
+			mui('#offCanvasContentScroll').scroll();
+
+		</script>
+	</body>
+</html>

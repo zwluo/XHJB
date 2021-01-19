@@ -1,0 +1,36 @@
+package com.maoqi.xhjb.pojo.vo;
+
+import com.maoqi.xhjb.pojo.dbbean.Tale;
+import com.maoqi.xhjb.util.StringUtils;
+import lombok.Data;
+
+@Data
+public class TaleVO {
+
+    private String id;
+    private String type;
+    private String title;
+    private String[] paragraphs;
+    private String narrator;
+    private String recorder;
+
+    public TaleVO() {}
+
+    public TaleVO(Tale tale) {
+        this.type = tale.getType();
+        this.title = tale.getTitle();
+        this.narrator = tale.getNarrator();
+        this.recorder = tale.getRecorder();
+
+        // 对内容按章节切分
+        if (StringUtils.isNotBlank(tale.getContent())) {
+            this.paragraphs = tale.getContent().replaceAll(" ", "").split("\\n");
+        }
+    }
+
+    public TaleVO(Object id, Object title) {
+        this.id = String.valueOf(id);
+        this.title = String.valueOf(title);
+    }
+
+}
