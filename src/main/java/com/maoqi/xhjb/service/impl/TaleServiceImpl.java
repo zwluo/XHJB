@@ -5,6 +5,7 @@ import com.maoqi.xhjb.pojo.dbbean.Tale;
 import com.maoqi.xhjb.pojo.vo.TaleVO;
 import com.maoqi.xhjb.service.TaleService;
 import com.maoqi.xhjb.util.StringUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -21,6 +22,7 @@ public class TaleServiceImpl implements TaleService {
         this.taleDao = taleDao;
     }
 
+    @Cacheable(value = "xhjb:cache:getTaleById", key = "'id:' + #p0")
     @Override
     public TaleVO getTaleById(Integer id) {
         TaleVO taleVO = null;
@@ -32,6 +34,7 @@ public class TaleServiceImpl implements TaleService {
         return taleVO;
     }
 
+    @Cacheable(value = "xhjb:cache:getTalesByType", key = "'type:' + #p0")
     @Override
     public List<TaleVO> getTalesByType(String type) {
         return taleDao.getTalesByType(type);

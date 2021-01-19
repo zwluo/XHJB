@@ -4,8 +4,10 @@ import com.maoqi.xhjb.pojo.dbbean.Tale;
 import com.maoqi.xhjb.util.StringUtils;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class TaleVO {
+public class TaleVO implements Serializable {
 
     private String id;
     private String type;

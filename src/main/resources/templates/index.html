@@ -148,28 +148,49 @@
 				methods: {
 					getData: function (id) {
 						const that = this;
-						axios.get("/XHJB/getTale/" + id)
-								.then(function (response) {
-									if (response.data) {
-										var data = response.data;
-										that.title = data.title;
-										that.paragraphs = data.paragraphs;
-										that.narrator = data.narrator;
-										that.recorder = data.recorder;
-										that.showContent = true;
+						// 先去浏览器缓存中取值
+						var paramsTemp = JSON.parse(sessionStorage.getItem(id));
+						if(paramsTemp != null) {
+							that.title = paramsTemp.title;
+							that.paragraphs = paramsTemp.paragraphs;
+							that.narrator = paramsTemp.narrator;
+							that.recorder = paramsTemp.recorder;
+						} else {
+							axios.get("/XHJB/getTale/" + id)
+									.then(function (response) {
+										if (response.data) {
+											var data = response.data;
+											that.title = data.title;
+											that.paragraphs = data.paragraphs;
+											that.narrator = data.narrator;
+											that.recorder = data.recorder;
 
-										// 切换内容时，定位到最上面
-										document.getElementsByClassName("tale-content")[0].style='transform: translate3d(0px, 0px, 0px) translateZ(0px);';
-										// 初始化滑块位置
-										localFlag = true;
 
-									} else {
-										alert('访问错误,请检查网络');
-									}
-								})
-								.catch(function (error) {
-									console.log(error);
-								});
+											// 将故事内容缓存到浏览器中
+											var params = {
+												title : that.title,
+												paragraphs : that.paragraphs,
+												narrator : that.narrator,
+												recorder : that.recorder
+											};
+											sessionStorage.setItem(id, JSON.stringify(params));
+										} else {
+											alert('访问错误,请检查网络');
+										}
+									})
+									.catch(function (error) {
+										console.log(error);
+									});
+						}
+
+						// 当网络较卡时，需要等数据都填充到模板之中才展示出来
+						that.showContent = true;
+
+						// 切换内容时，定位到最上面
+						document.getElementsByClassName("tale-content")[0].style='transform: translate3d(0px, 0px, 0px) translateZ(0px);';
+						// 初始化滑块位置
+						localFlag = true;
+
 					},
 					getMyth: function (type) {
 						const that = this;
