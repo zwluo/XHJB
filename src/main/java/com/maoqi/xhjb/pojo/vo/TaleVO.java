@@ -27,6 +27,11 @@ public class TaleVO implements Serializable {
         // 对内容按章节切分
         if (StringUtils.isNotBlank(tale.getContent())) {
             this.paragraphs = tale.getContent().replaceAll(" ", "").split("\\n");
+            if ("神话".equals(this.type) || "故事".equals(this.type) || "传说".equals(this.type)) {
+                for (int i=0; i<this.paragraphs.length; i++) {
+                    this.paragraphs[i] = "　　" + this.paragraphs[i];
+                }
+            }
         }
     }
 

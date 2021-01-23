@@ -30,7 +30,7 @@
 			}
 
 			.tale-content {
-				width: auto;
+				width: 100%;
 				margin-right: 10px;
 				background: #c8e8c8;
 				padding: 10px 15px;
@@ -40,6 +40,7 @@
 				line-height: 1.8;
 				/*每行字体平均分布*/
 				text-align: justify;
+				position: static;
 			}
 
 			p {
@@ -53,6 +54,12 @@
 				background: #242424;
 				border-radius: 10px;
 				border-color: #ffffff36;
+			}
+
+			.ballad {
+				text-align: center;
+				font-size: 16px;
+				padding: 10px 5px;
 			}
 
 		</style>
@@ -95,6 +102,13 @@
 							<button @click="getData(column.id)">{{column.title}}</button>
 						</div>
 					</li>
+
+					<li class="mui-table-view-cell mui-collapse">
+						<a class="mui-navigate-right" href="#">歌 谣</a>
+						<div class="mui-collapse-content title-bar" v-for="column in columns4">
+							<button @click="getData(column.id)">{{column.title}}</button>
+						</div>
+					</li>
 				</ul>
 		      </div>
 		    </div>
@@ -109,13 +123,21 @@
 		    </header>
 			
 		    <div id="offCanvasContentScroll" class="mui-content mui-scroll-wrapper">
-		      <div class="mui-scroll tale-content" v-show="showContent">
-				  <!-- 主界面具体展示内容 -->
-				<p v-for="paragraph in paragraphs">　　{{paragraph}}</p>
-				  <div style="text-align: center;">
-					  <p>口述人：{{narrator}}　搜集人：{{recorder}}</p>
-				  </div>
-		      </div>
+				<div class="mui-scroll tale-content ballad" v-if="type == '歌谣'">
+					<!-- 主界面具体展示内容 -->
+					<p v-for="paragraph in paragraphs">{{paragraph}}</p>
+					<div style="text-align: center;">
+						<p>口述人：{{narrator}}　搜集人：{{recorder}}</p>
+					</div>
+				</div>
+
+				<div class="mui-scroll tale-content" v-else>
+					<!-- 主界面具体展示内容 -->
+					<p v-for="paragraph in paragraphs">{{paragraph}}</p>
+					<div style="text-align: center;">
+						<p>口述人：{{narrator}}　搜集人：{{recorder}}</p>
+					</div>
+				</div>
 		    </div>
 			
 			<!-- 侧滑菜单弹出后的主页面遮罩 -->
@@ -130,6 +152,7 @@
 			new Vue({
 				el: '.main',
 				data: {
+					type: '',
 					title: '',
 					paragraphs: [],
 					narrator: '',
@@ -138,12 +161,14 @@
 					columns: [id='',title=''],
 					columns2: [id='',title=''],
 					columns3: [id='',title=''],
+					columns4: [id='',title=''],
 				},
 				created: function () {
 					this.getData(1);
 					this.getMyth('神话');
 					this.getMyth2('传说');
 					this.getMyth3('故事');
+					this.getMyth4('歌谣');
 				},
 				methods: {
 					getData: function (id) {
@@ -151,6 +176,7 @@
 						// 先去浏览器缓存中取值
 						var paramsTemp = JSON.parse(sessionStorage.getItem(id));
 						if(paramsTemp != null) {
+							that.type = paramsTemp.type;
 							that.title = paramsTemp.title;
 							that.paragraphs = paramsTemp.paragraphs;
 							that.narrator = paramsTemp.narrator;
@@ -160,6 +186,7 @@
 									.then(function (response) {
 										if (response.data) {
 											var data = response.data;
+											that.type = data.type;
 											that.title = data.title;
 											that.paragraphs = data.paragraphs;
 											that.narrator = data.narrator;
@@ -168,6 +195,7 @@
 
 											// 将故事内容缓存到浏览器中
 											var params = {
+												type : that.type,
 												title : that.title,
 												paragraphs : that.paragraphs,
 												narrator : that.narrator,
@@ -226,6 +254,20 @@
 								.then(function (response) {
 									if (response.data) {
 										that.columns3 = response.data;
+									} else {
+										alert('访问错误,请检查网络');
+									}
+								})
+								.catch(function (error) {
+									console.log(error);
+								});
+					},
+					getMyth4: function (type) {
+						const that = this;
+						axios.get("/XHJB/getTalesByType/" + type)
+								.then(function (response) {
+									if (response.data) {
+										that.columns4 = response.data;
 									} else {
 										alert('访问错误,请检查网络');
 									}
