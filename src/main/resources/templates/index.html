@@ -109,6 +109,13 @@
 							<button @click="getData(column.id)">{{column.title}}</button>
 						</div>
 					</li>
+
+					<li class="mui-table-view-cell mui-collapse">
+						<a class="mui-navigate-right" href="#">谚 语</a>
+						<div class="mui-collapse-content title-bar" v-for="column in columns5">
+							<button @click="getData(column.id)">{{column.title}}</button>
+						</div>
+					</li>
 				</ul>
 		      </div>
 		    </div>
@@ -134,9 +141,15 @@
 				<div class="mui-scroll tale-content" v-else>
 					<!-- 主界面具体展示内容 -->
 					<p v-for="paragraph in paragraphs">{{paragraph}}</p>
-					<div style="text-align: center;">
+
+					<div v-if="type == '谚语'">
+
+					</div>
+
+					<div style="text-align: center;" v-else>
 						<p>口述人：{{narrator}}　搜集人：{{recorder}}</p>
 					</div>
+
 				</div>
 		    </div>
 			
@@ -162,6 +175,7 @@
 					columns2: [id='',title=''],
 					columns3: [id='',title=''],
 					columns4: [id='',title=''],
+					columns5: [id='',title=''],
 				},
 				created: function () {
 					this.getData(1);
@@ -169,6 +183,7 @@
 					this.getMyth2('传说');
 					this.getMyth3('故事');
 					this.getMyth4('歌谣');
+					this.getMyth5('谚语');
 				},
 				methods: {
 					getData: function (id) {
@@ -268,6 +283,20 @@
 								.then(function (response) {
 									if (response.data) {
 										that.columns4 = response.data;
+									} else {
+										alert('访问错误,请检查网络');
+									}
+								})
+								.catch(function (error) {
+									console.log(error);
+								});
+					},
+					getMyth5: function (type) {
+						const that = this;
+						axios.get("/XHJB/getTalesByType/" + type)
+								.then(function (response) {
+									if (response.data) {
+										that.columns5 = response.data;
 									} else {
 										alert('访问错误,请检查网络');
 									}

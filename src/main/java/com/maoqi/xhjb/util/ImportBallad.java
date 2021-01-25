@@ -14,15 +14,12 @@ import java.util.List;
 public class ImportBallad {
     public static void main(String[] args) throws IOException {
         File file = new File("d:" + File.separator + "ballad.txt");
-        BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(file));
-        inputStream.available();
-
         BufferedReader reader = new BufferedReader(new FileReader(file));
 
         String line = null;
 
         // 故事类型
-        String type = "";
+        String type = "歌谣";
 
         // 上一行是否是故事类型
         boolean lastIsType = false;
@@ -63,7 +60,7 @@ public class ImportBallad {
                         tale.setNarrator(line.substring(line.indexOf("：") + 1).replaceAll("\\s+", " "));
 
                         // 设置类型
-                        tale.setType("歌谣");
+                        tale.setType(type);
                         tale.setCreatedate(new Date());
                         tale.setCreateby("system");
 

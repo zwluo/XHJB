@@ -46,10 +46,11 @@ public class TaleServiceImpl implements TaleService {
         try {
             list = getTalesFromTxt();
             list.addAll(getBalladFromTxt());
+            list.addAll(getProverbFromTxt());
+            taleDao.saveTales(list);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        taleDao.saveTales(list);
     }
 
     public List<Tale> getTalesFromTxt() throws IOException {
@@ -191,6 +192,51 @@ public class TaleServiceImpl implements TaleService {
                 }
             }
         }
+        return list;
+    }
+
+    public List<Tale> getProverbFromTxt() throws IOException {
+        File file = new File("d:" + File.separator + "proverb.txt");
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+
+        String line = null;
+
+        // 故事类型
+        String type = "谚语";
+
+        List<Tale> list = new ArrayList<>();
+        Tale tale = null;
+        Date date = new Date();
+
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+            // 故事类别
+            if(line.contains("（") && line.contains("）") && line.contains("类")) {
+                if (tale != null) {
+                    list.add(tale);
+                }
+                tale = new Tale();
+                tale.setType(type);
+                tale.setCreateby("system");
+                tale.setCreatedate(date);
+                tale.setTitle(line);
+            } else {
+                if (tale == null) {
+                    continue;
+                }
+
+                if(StringUtils.isBlank(tale.getContent())) {
+                    // 替换掉内容里面的空格
+                    tale.setContent(line.replaceAll(" ", ""));
+                } else {
+                    tale.setContent(tale.getContent() + "\n" + line);
+                }
+            }
+        }
+        if (tale != null) {
+            list.add(tale);
+        }
+
         return list;
     }
 }
