@@ -144,7 +144,6 @@ public class TaleServiceImpl implements TaleService {
         Tale tale = new Tale();
 
         while ((line = reader.readLine()) != null) {
-            System.out.println(line);
             // 故事类别
             if("神话".equals(line) || "传说".equals(line) || "故事".equals(line)) {
                 type = line;
@@ -178,7 +177,6 @@ public class TaleServiceImpl implements TaleService {
 
                         list.add(tale);
                         tale = new Tale();
-                        System.out.println(tale);
                     } else {
                         System.out.println("问题记录人：" + line);
                     }
@@ -209,7 +207,6 @@ public class TaleServiceImpl implements TaleService {
         Date date = new Date();
 
         while ((line = reader.readLine()) != null) {
-            System.out.println(line);
             // 故事类别
             if(line.contains("（") && line.contains("）") && line.contains("类")) {
                 if (tale != null) {
