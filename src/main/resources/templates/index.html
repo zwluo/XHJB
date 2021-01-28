@@ -116,6 +116,13 @@
 							<button @click="getData(column.id)">{{column.title}}</button>
 						</div>
 					</li>
+
+					<li class="mui-table-view-cell mui-collapse">
+						<a class="mui-navigate-right" href="#">关于本书</a>
+						<div class="mui-collapse-content title-bar" v-for="column in columns6">
+							<button @click="getData(column.id)">{{column.title}}</button>
+						</div>
+					</li>
 				</ul>
 		      </div>
 		    </div>
@@ -142,7 +149,7 @@
 					<!-- 主界面具体展示内容 -->
 					<p v-for="paragraph in paragraphs">{{paragraph}}</p>
 
-					<div v-if="type == '谚语'">
+					<div v-if="type == '谚语' || type == '关于本书'">
 
 					</div>
 
@@ -176,14 +183,16 @@
 					columns3: [id='',title=''],
 					columns4: [id='',title=''],
 					columns5: [id='',title=''],
+					columns6: [id='',title=''],
 				},
 				created: function () {
 					this.getData(1);
 					this.getMyth('神话');
-					this.getMyth2('传说');
-					this.getMyth3('故事');
-					this.getMyth4('歌谣');
-					this.getMyth5('谚语');
+					this.getMyth('传说');
+					this.getMyth('故事');
+					this.getMyth('歌谣');
+					this.getMyth('谚语');
+					this.getMyth('关于本书');
 				},
 				methods: {
 					getData: function (id) {
@@ -196,6 +205,11 @@
 							that.paragraphs = paramsTemp.paragraphs;
 							that.narrator = paramsTemp.narrator;
 							that.recorder = paramsTemp.recorder;
+
+							// 对于统计表，修改字体大小
+							if("各乡镇入选作品" == that.title) {
+								document.getElementsByClassName("tale-content")[0].style="font-size:15px;";
+							}
 						} else {
 							axios.get("/XHJB/getTale/" + id)
 									.then(function (response) {
@@ -217,6 +231,11 @@
 												recorder : that.recorder
 											};
 											sessionStorage.setItem(id, JSON.stringify(params));
+
+											// 对于统计表，修改字体大小
+											if("各乡镇入选作品" == that.title) {
+												document.getElementsByClassName("tale-content")[0].style="font-size:15px;";
+											}
 										} else {
 											alert('访问错误,请检查网络');
 										}
@@ -233,70 +252,25 @@
 						document.getElementsByClassName("tale-content")[0].style='transform: translate3d(0px, 0px, 0px) translateZ(0px);';
 						// 初始化滑块位置
 						localFlag = true;
-
 					},
 					getMyth: function (type) {
 						const that = this;
 						axios.get("/XHJB/getTalesByType/" + type)
 								.then(function (response) {
 									if (response.data) {
-										that.columns = response.data;
-									} else {
-										alert('访问错误,请检查网络');
-									}
-								})
-								.catch(function (error) {
-									console.log(error);
-								});
-					},
-					getMyth2: function (type) {
-						const that = this;
-						axios.get("/XHJB/getTalesByType/" + type)
-								.then(function (response) {
-									if (response.data) {
-										that.columns2 = response.data;
-									} else {
-										alert('访问错误,请检查网络');
-									}
-								})
-								.catch(function (error) {
-									console.log(error);
-								});
-					},
-					getMyth3: function (type) {
-						const that = this;
-						axios.get("/XHJB/getTalesByType/" + type)
-								.then(function (response) {
-									if (response.data) {
-										that.columns3 = response.data;
-									} else {
-										alert('访问错误,请检查网络');
-									}
-								})
-								.catch(function (error) {
-									console.log(error);
-								});
-					},
-					getMyth4: function (type) {
-						const that = this;
-						axios.get("/XHJB/getTalesByType/" + type)
-								.then(function (response) {
-									if (response.data) {
-										that.columns4 = response.data;
-									} else {
-										alert('访问错误,请检查网络');
-									}
-								})
-								.catch(function (error) {
-									console.log(error);
-								});
-					},
-					getMyth5: function (type) {
-						const that = this;
-						axios.get("/XHJB/getTalesByType/" + type)
-								.then(function (response) {
-									if (response.data) {
-										that.columns5 = response.data;
+										if("神话" == type) {
+											that.columns = response.data;
+										} else if("传说" == type) {
+											that.columns2 = response.data;
+										} else if("故事" == type) {
+											that.columns3 = response.data;
+										} else if("歌谣" == type) {
+											that.columns4 = response.data;
+										} else if("谚语" == type) {
+											that.columns5 = response.data;
+										} else if("关于本书" == type) {
+											that.columns6 = response.data;
+										}
 									} else {
 										alert('访问错误,请检查网络');
 									}
