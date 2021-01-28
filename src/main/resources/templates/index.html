@@ -197,6 +197,12 @@
 				methods: {
 					getData: function (id) {
 						const that = this;
+
+						// 切换内容时，定位到最上面
+						document.getElementsByClassName("tale-content")[0].style='transform: translate3d(0px, 0px, 0px) translateZ(0px);';
+						// 初始化滑块位置
+						localFlag = true;
+
 						// 先去浏览器缓存中取值
 						var paramsTemp = JSON.parse(sessionStorage.getItem(id));
 						if(paramsTemp != null) {
@@ -210,6 +216,9 @@
 							if("各乡镇入选作品" == that.title) {
 								document.getElementsByClassName("tale-content")[0].style="font-size:15px;";
 							}
+
+							// 当网络较卡时，需要等数据都填充到模板之中才展示出来
+							that.showContent = true;
 						} else {
 							axios.get("/XHJB/getTale/" + id)
 									.then(function (response) {
@@ -236,6 +245,9 @@
 											if("各乡镇入选作品" == that.title) {
 												document.getElementsByClassName("tale-content")[0].style="font-size:15px;";
 											}
+
+											// 当网络较卡时，需要等数据都填充到模板之中才展示出来
+											that.showContent = true;
 										} else {
 											alert('访问错误,请检查网络');
 										}
@@ -244,14 +256,6 @@
 										console.log(error);
 									});
 						}
-
-						// 当网络较卡时，需要等数据都填充到模板之中才展示出来
-						that.showContent = true;
-
-						// 切换内容时，定位到最上面
-						document.getElementsByClassName("tale-content")[0].style='transform: translate3d(0px, 0px, 0px) translateZ(0px);';
-						// 初始化滑块位置
-						localFlag = true;
 					},
 					getMyth: function (type) {
 						const that = this;
