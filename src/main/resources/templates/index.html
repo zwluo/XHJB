@@ -145,7 +145,7 @@
 					</div>
 				</div>
 
-				<div class="mui-scroll tale-content" v-else>
+				<div v-show="showContent" class="mui-scroll tale-content" v-else>
 					<!-- 主界面具体展示内容 -->
 					<p v-for="paragraph in paragraphs">{{paragraph}}</p>
 
