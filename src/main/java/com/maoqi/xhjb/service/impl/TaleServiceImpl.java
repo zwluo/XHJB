@@ -332,7 +332,7 @@ public class TaleServiceImpl implements TaleService {
                 "　　二零一七年九月九日");
         tale.setCreatedate(date);
         tale.setCreateby("system");
-        list.add(tale);
+        //list.add(tale);
 
         return list;
     }
