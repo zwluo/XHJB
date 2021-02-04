@@ -2,6 +2,7 @@ package com.maoqi.xhjb.dao.impl;
 
 import com.maoqi.xhjb.dao.TaleDao;
 import com.maoqi.xhjb.pojo.dbbean.Tale;
+import com.maoqi.xhjb.pojo.dbbean.VisitLog;
 import com.maoqi.xhjb.pojo.vo.TaleVO;
 import org.springframework.stereotype.Repository;
 
@@ -31,7 +32,7 @@ public class TaleDaoImpl implements TaleDao {
         List<TaleVO> voList = new ArrayList<>();
 
         String sql = "select id,title from tale where type =?1 order by id ";
-        Query query= template.createNativeQuery(sql );
+        Query query= template.createNativeQuery(sql);
         query.setParameter(1,type);
 
         List list = query.getResultList();
@@ -65,5 +66,30 @@ public class TaleDaoImpl implements TaleDao {
         }
     }
 
+    @Override
+    public int getOnlineCounter() {
+        String sql = "select count(*) " +
+                "from ( " +
+                "         select ip " +
+                "         from visit_log " +
+                "         where createdate > CURRENT_TIMESTAMP - INTERVAL 10 MINUTE " +
+                "         group by ip) t";
+        Query query= template.createNativeQuery(sql);
+
+        int counter = Integer.parseInt(String.valueOf(query.getSingleResult()));
+        return counter;
+    }
+
+    @Override
+    public void saveVisitLog(VisitLog item) {
+        template.persist(item);
+        try {
+            template.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            template.clear();
+        }
+    }
 
 }

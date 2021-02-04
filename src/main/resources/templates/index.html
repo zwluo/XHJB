@@ -123,6 +123,9 @@
 							<button @click="getData(column.id)">{{column.title}}</button>
 						</div>
 					</li>
+					<li class="mui-table-view-cell mui-collapse">
+						当前在线人数：{{counter}}
+					</li>
 				</ul>
 		      </div>
 		    </div>
@@ -184,6 +187,8 @@
 					columns4: [id='',title=''],
 					columns5: [id='',title=''],
 					columns6: [id='',title=''],
+					timer: '',
+					counter: 0,
 				},
 				created: function () {
 					this.getData(1);
@@ -282,7 +287,27 @@
 								.catch(function (error) {
 									console.log(error);
 								});
+					},
+					getCounter: function () {
+						const that = this;
+						axios.get("/XHJB/getCounter")
+								.then(function (response) {
+									if (response.status == 200) {
+										that.counter = response.data;
+									} else {
+										alert('访问错误,请检查网络');
+									}
+								})
+								.catch(function (error) {
+									console.log(error);
+								});
 					}
+				},
+				mounted() {
+					this.timer = setInterval(this.getCounter, 10000);
+				},
+				beforeDestroy() {
+					clearInterval(this.timer);
 				}
 			});
 

@@ -47,4 +47,13 @@ public class TaleController {
         return "success";
     }
 
+    /**
+     * 获取当前在线人数
+     * @return 在线人数
+     */
+    @GetMapping("/getCounter")
+    public int getCounter() {
+        return taleService.getOnlineCounter();
+    }
+
 }

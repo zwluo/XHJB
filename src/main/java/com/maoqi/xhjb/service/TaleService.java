@@ -26,4 +26,10 @@ public interface TaleService {
      * 导入故事
      */
     void saveTales();
+
+    /**
+     * 获取同时在线人数
+     * @return 在线人数
+     */
+    int getOnlineCounter();
 }

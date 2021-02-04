@@ -54,6 +54,12 @@ public class TaleServiceImpl implements TaleService {
         }
     }
 
+    @Cacheable(value = "xhjb:cache:getOnlineCounter")
+    @Override
+    public int getOnlineCounter() {
+        return taleDao.getOnlineCounter();
+    }
+
     public List<Tale> getTalesFromTxt() throws IOException {
         List<Tale> list = new ArrayList<>();
 

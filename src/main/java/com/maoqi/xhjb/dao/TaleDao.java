@@ -1,6 +1,7 @@
 package com.maoqi.xhjb.dao;
 
 import com.maoqi.xhjb.pojo.dbbean.Tale;
+import com.maoqi.xhjb.pojo.dbbean.VisitLog;
 import com.maoqi.xhjb.pojo.vo.TaleVO;
 
 import java.util.List;
@@ -25,4 +26,15 @@ public interface TaleDao {
      * 导入故事
      */
     void saveTales(List<Tale> list);
+
+    /**
+     * 获取同时在线人数
+     * @return 在线人数
+     */
+    int getOnlineCounter();
+
+    /**
+     * 导入访问日志
+     */
+    void saveVisitLog(VisitLog item);
 }
