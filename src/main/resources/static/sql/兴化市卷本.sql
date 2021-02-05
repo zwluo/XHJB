@@ -21,6 +21,6 @@ create table visit_log
     request      varchar(50) comment '请求参数',
     response       varchar(50) comment '接口返回',
     ip      varchar(50) comment '访问者IP',
-    createdate datetime comment '创建时间',
-    createby   varchar(20) comment '创建人'
+    createdate datetime comment '创建时间' default now(),
+    createby   varchar(20) comment '创建人' default 'system'
 );

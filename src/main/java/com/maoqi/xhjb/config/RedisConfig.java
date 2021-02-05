@@ -25,7 +25,7 @@ public class RedisConfig {
 		cacheNames.add("xhjb:cache:getOnlineCounter");
  
 		ConcurrentHashMap<String, RedisCacheConfiguration> configMap = new ConcurrentHashMap<>();
-		configMap.put("xhjb:cache:getOnlineCounter", config.entryTtl(Duration.ofMinutes(1L)));//有效期1分钟
+		configMap.put("xhjb:cache:getOnlineCounter", config.entryTtl(Duration.ofSeconds(10L)));//有效期1分钟
 		
 		//需要先初始化缓存名称，再初始化其它的配置。
 		RedisCacheManager cacheManager = RedisCacheManager.builder(factory).initialCacheNames(cacheNames).withInitialCacheConfigurations(configMap).build();

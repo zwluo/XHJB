@@ -30,13 +30,12 @@ public class ServiceAspect {
     private final HttpServletRequest request;
     private final TaleDaoImpl taleDao;
 
-    @Autowired
     public ServiceAspect(HttpServletRequest request, TaleDaoImpl taleDao) {
         this.request = request;
         this.taleDao = taleDao;
     }
 
-    @Around("execution(* com.maoqi.xhjb.controller.*.*(..))")
+    @Around("execution(* com.maoqi.xhjb.controller.TaleController.getTaleById(..))")
     public Object serviceBefore(ProceedingJoinPoint pjp) throws Throwable {
         Map<String, Object> logMap1 = new HashMap<>();
         Signature signature = pjp.getSignature();
@@ -70,13 +69,8 @@ public class ServiceAspect {
         visitLog.setRequest(logMap1.toString());
         //visitLog.setResponse(String.valueOf(result));
         visitLog.setIp(IpUtil.getIpAddr(request));
-        visitLog.setCreatedate(new Date());
-        visitLog.setCreateby("system");
-
         taleDao.saveVisitLog(visitLog);
 
-        Object result = pjp.proceed();
-
-        return result;
+        return pjp.proceed();
     }
 }
