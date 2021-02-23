@@ -43,15 +43,11 @@ public class TaleServiceImpl implements TaleService {
     @Override
     public void saveTales() {
         List<Tale> list;
-        try {
-            list = getTalesFromTxt();
-            list.addAll(getBalladFromTxt());
-            list.addAll(getProverbFromTxt());
-            list.addAll(getDescribe());
-            taleDao.saveTales(list);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        list = getTalesFromTxt();
+        list.addAll(getBalladFromTxt());
+        list.addAll(getProverbFromTxt());
+        list.addAll(getDescribe());
+        taleDao.saveTales(list);
     }
 
     @Cacheable(value = "xhjb:cache:getOnlineCounter")
@@ -60,201 +56,215 @@ public class TaleServiceImpl implements TaleService {
         return taleDao.getOnlineCounter();
     }
 
-    public List<Tale> getTalesFromTxt() throws IOException {
+    /**
+     * 从TXT文本导入神话故事
+     * @return 神话故事
+     */
+    public List<Tale> getTalesFromTxt() {
         List<Tale> list = new ArrayList<>();
 
         File file = new File("d:" + File.separator + "tale.txt");
-        BufferedReader reader = new BufferedReader(new FileReader(file));
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 
-        // 故事类型
-        String type = "";
+            // 故事类型
+            String type = "";
 
-        // 上一行是否是故事类型
-        boolean lastIsType = false;
+            // 上一行是否是故事类型
+            boolean lastIsType = false;
 
-        // 上一行是否是空白行
-        boolean lastIsBlank = false;
+            // 上一行是否是空白行
+            boolean lastIsBlank = false;
 
-        Tale tale = new Tale();
+            Tale tale = new Tale();
 
-        String line;
-        while ((line = reader.readLine()) != null) {
-            // 故事类别
-            if("神话".equals(line) || "传说".equals(line) || "故事".equals(line)) {
-                type = line;
-                lastIsType = true;
-            } else if(StringUtils.isBlank(line)) {
-                lastIsBlank = true;
-            } else {
-                // 故事标题
-                if(lastIsType || lastIsBlank) {
-                    tale.setTitle(line.replaceAll("。", "·"));
-                    lastIsType = false;
-                    lastIsBlank = false;
-                } else if(line.contains("口述人") || line.contains("搜集人") || line.contains("整理人") || line.contains("采集人")) {   // 记录人
-                    if (line.length() > 9 && line.indexOf("：") != line.lastIndexOf("：")) {
-                        // 去除记录人空格
-                        line = line.trim();
-                        int lastIndex = line.lastIndexOf("：");
-                        // 将多个空格替换为一个
-                        tale.setRecorder(line.substring(lastIndex + 1).replaceAll("\\s+", " "));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // 故事类别
+                if ("神话".equals(line) || "传说".equals(line) || "故事".equals(line)) {
+                    type = line;
+                    lastIsType = true;
+                } else if (StringUtils.isBlank(line)) {
+                    lastIsBlank = true;
+                } else {
+                    // 故事标题
+                    if (lastIsType || lastIsBlank) {
+                        tale.setTitle(line.replaceAll("。", "·"));
+                        lastIsType = false;
+                        lastIsBlank = false;
+                    } else if (line.contains("口述人") || line.contains("搜集人") || line.contains("整理人") || line.contains("采集人")) {   // 记录人
+                        if (line.length() > 9 && line.indexOf("：") != line.lastIndexOf("：")) {
+                            // 去除记录人空格
+                            line = line.trim();
+                            int lastIndex = line.lastIndexOf("：");
+                            // 将多个空格替换为一个
+                            tale.setRecorder(line.substring(lastIndex + 1).replaceAll("\\s+", " "));
 
-                        line = line.substring(0, lastIndex - 3).trim();
+                            line = line.substring(0, lastIndex - 3).trim();
 
-                        // 将多个空格替换为一个
-                        tale.setNarrator(line.substring(line.indexOf("：") + 1).replaceAll("\\s+", " "));
+                            // 将多个空格替换为一个
+                            tale.setNarrator(line.substring(line.indexOf("：") + 1).replaceAll("\\s+", " "));
 
-                        // 设置类型
-                        tale.setType(type);
-                        tale.setCreatedate(new Date());
-                        tale.setCreateby("system");
+                            // 设置类型
+                            tale.setType(type);
+                            tale.setCreatedate(new Date());
+                            tale.setCreateby("system");
 
-                        // 替换掉内容里面的空格
-                        if (tale.getContent() != null) {
-                            tale.setContent(tale.getContent().replaceAll(" ", ""));
+                            // 替换掉内容里面的空格
+                            if (tale.getContent() != null) {
+                                tale.setContent(tale.getContent().replaceAll(" ", ""));
+                            }
+                            list.add(tale);
+                            tale = new Tale();
+                        } else {
+                            System.out.println("问题记录人：" + line);
                         }
-                        list.add(tale);
-                        tale = new Tale();
-                    } else {
-                        System.out.println("问题记录人：" + line);
-                    }
-                } else {        // 故事内容
-                    if(StringUtils.isBlank(tale.getContent())) {
-                        tale.setContent("　　" + line);
-                    } else {
-                        tale.setContent(tale.getContent() + "\n" + "　　" + line);
+                    } else {        // 故事内容
+                        if (StringUtils.isBlank(tale.getContent())) {
+                            tale.setContent("　　" + line);
+                        } else {
+                            tale.setContent(tale.getContent() + "\n" + "　　" + line);
+                        }
                     }
                 }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return list;
     }
 
     /**
-     * 歌谣
+     * 从TXT文本导入歌谣
      * @return 歌谣内容
-     * @throws IOException 异常
      */
-    public List<Tale> getBalladFromTxt() throws IOException {
+    public List<Tale> getBalladFromTxt() {
         File file = new File("d:" + File.separator + "ballad.txt");
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-
-        String line;
-
-        // 故事类型
-        String type = "歌谣";
-
-        // 上一行是否是故事类型
-        boolean lastIsType = false;
-
-        // 上一行是否是空白行
-        boolean lastIsBlank = false;
 
         List<Tale> list = new ArrayList<>();
 
-        Tale tale = new Tale();
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 
-        while ((line = reader.readLine()) != null) {
-            // 故事类别
-            if("神话".equals(line) || "传说".equals(line) || "故事".equals(line)) {
-                type = line;
-                lastIsType = true;
-            } else if(StringUtils.isBlank(line)) {
-                lastIsBlank = true;
-            } else {
-                // 故事标题
-                if((lastIsType || lastIsBlank) && StringUtils.isBlank(tale.getTitle())) {
-                    tale.setTitle(line.replaceAll("。", "·"));
-                    tale.setContent("");
-                    lastIsType = false;
-                    lastIsBlank = false;
-                } else if(line.contains("口述人") || line.contains("搜集人") || line.contains("整理人") || line.contains("采集人") || line.contains("演唱者")) {   // 记录人
-                    if (line.length() > 9 && line.indexOf("：") != line.lastIndexOf("：")) {
-                        // 去除记录人空格
-                        line = line.trim();
-                        int lastIndex = line.lastIndexOf("：");
-                        // 将多个空格替换为一个
-                        tale.setRecorder(line.substring(lastIndex + 1).replaceAll("\\s+", " "));
+            String line;
 
-                        line = line.substring(0, lastIndex - 3).trim();
+            // 故事类型
+            String type = "歌谣";
 
-                        // 将多个空格替换为一个
-                        tale.setNarrator(line.substring(line.indexOf("：") + 1).replaceAll("\\s+", " "));
+            // 上一行是否是故事类型
+            boolean lastIsType = false;
 
-                        // 设置类型
-                        tale.setType(type);
-                        tale.setCreatedate(new Date());
-                        tale.setCreateby("system");
+            // 上一行是否是空白行
+            boolean lastIsBlank = false;
 
-                        // 替换掉内容里面的空格
-                        if (tale.getContent() != null) {
-                            tale.setContent(tale.getContent().replaceAll(" ", ""));
+            Tale tale = new Tale();
+
+            while ((line = reader.readLine()) != null) {
+                // 故事类别
+                if ("神话".equals(line) || "传说".equals(line) || "故事".equals(line)) {
+                    type = line;
+                    lastIsType = true;
+                } else if (StringUtils.isBlank(line)) {
+                    lastIsBlank = true;
+                } else {
+                    // 故事标题
+                    if ((lastIsType || lastIsBlank) && StringUtils.isBlank(tale.getTitle())) {
+                        tale.setTitle(line.replaceAll("。", "·"));
+                        tale.setContent("");
+                        lastIsType = false;
+                        lastIsBlank = false;
+                    } else if (line.contains("口述人") || line.contains("搜集人") || line.contains("整理人") || line.contains("采集人") || line.contains("演唱者")) {   // 记录人
+                        if (line.length() > 9 && line.indexOf("：") != line.lastIndexOf("：")) {
+                            // 去除记录人空格
+                            line = line.trim();
+                            int lastIndex = line.lastIndexOf("：");
+                            // 将多个空格替换为一个
+                            tale.setRecorder(line.substring(lastIndex + 1).replaceAll("\\s+", " "));
+
+                            line = line.substring(0, lastIndex - 3).trim();
+
+                            // 将多个空格替换为一个
+                            tale.setNarrator(line.substring(line.indexOf("：") + 1).replaceAll("\\s+", " "));
+
+                            // 设置类型
+                            tale.setType(type);
+                            tale.setCreatedate(new Date());
+                            tale.setCreateby("system");
+
+                            // 替换掉内容里面的空格
+                            if (tale.getContent() != null) {
+                                tale.setContent(tale.getContent().replaceAll(" ", ""));
+                            }
+                            list.add(tale);
+                            tale = new Tale();
+                        } else {
+                            System.out.println("问题记录人：" + line);
                         }
-                        list.add(tale);
-                        tale = new Tale();
-                    } else {
-                        System.out.println("问题记录人：" + line);
+                    } else {        // 故事内容
+                        if (StringUtils.isBlank(tale.getContent())) {
+                            tale.setContent(line);
+                        } else {
+                            tale.setContent(tale.getContent() + "\n" + line);
+                        }
                     }
-                } else {        // 故事内容
-                    if(StringUtils.isBlank(tale.getContent())) {
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
+     * 从TXT文本导入谚语
+     * @return 谚语
+     */
+    public List<Tale> getProverbFromTxt() {
+        File file = new File("d:" + File.separator + "proverb.txt");
+
+        List<Tale> list = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+
+            String line;
+
+            // 故事类型
+            String type = "谚语";
+
+            Tale tale = null;
+            Date date = new Date();
+
+            while ((line = reader.readLine()) != null) {
+                // 故事类别
+                if (line.contains("（") && line.contains("）") && line.contains("类")) {
+                    if (tale != null) {
+                        list.add(tale);
+                    }
+                    tale = new Tale();
+                    tale.setType(type);
+                    tale.setCreateby("system");
+                    tale.setCreatedate(date);
+                    tale.setTitle(line);
+                } else {
+                    if (tale == null) {
+                        continue;
+                    }
+
+                    if (StringUtils.isBlank(tale.getContent())) {
                         tale.setContent(line);
                     } else {
                         tale.setContent(tale.getContent() + "\n" + line);
                     }
                 }
             }
-        }
-        return list;
-    }
-
-    /**
-     * 谚语
-     * @return 谚语
-     * @throws IOException 异常
-     */
-    public List<Tale> getProverbFromTxt() throws IOException {
-        File file = new File("d:" + File.separator + "proverb.txt");
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-
-        String line;
-
-        // 故事类型
-        String type = "谚语";
-
-        List<Tale> list = new ArrayList<>();
-        Tale tale = null;
-        Date date = new Date();
-
-        while ((line = reader.readLine()) != null) {
-            // 故事类别
-            if(line.contains("（") && line.contains("）") && line.contains("类")) {
-                if (tale != null) {
-                    list.add(tale);
+            if (tale != null) {
+                // 替换掉内容里面的空格
+                if (tale.getContent() != null) {
+                    tale.setContent(tale.getContent().replaceAll(" ", ""));
                 }
-                tale = new Tale();
-                tale.setType(type);
-                tale.setCreateby("system");
-                tale.setCreatedate(date);
-                tale.setTitle(line);
-            } else {
-                if (tale == null) {
-                    continue;
-                }
-
-                if(StringUtils.isBlank(tale.getContent())) {
-                    tale.setContent(line);
-                } else {
-                    tale.setContent(tale.getContent() + "\n" + line);
-                }
+                list.add(tale);
             }
-        }
-        if (tale != null) {
-            // 替换掉内容里面的空格
-            if (tale.getContent() != null) {
-                tale.setContent(tale.getContent().replaceAll(" ", ""));
-            }
-            list.add(tale);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return list;

@@ -11,50 +11,51 @@ import java.util.List;
  * 导入谚语
  */
 public class ImportProverb {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         File file = new File("d:" + File.separator + "proverb.txt");
-        BufferedReader reader = new BufferedReader(new FileReader(file));
 
-        String line = null;
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 
-        // 故事类型
-        String type = "谚语";
+            String line = null;
 
-        List<Tale> list = new ArrayList<>();
-        Tale tale = null;
-        Date date = new Date();
+            // 故事类型
+            String type = "谚语";
 
-        while ((line = reader.readLine()) != null) {
-            System.out.println(line);
-            // 故事类别
-            if(line.contains("（") && line.contains("）") && line.contains("类")) {
-                if (tale != null) {
-                    list.add(tale);
-                }
-                tale = new Tale();
-                tale.setType(type);
-                tale.setCreateby("system");
-                tale.setCreatedate(date);
-                tale.setTitle(line);
-            } else {
-                if (tale == null) {
-                    continue;
-                }
+            List<Tale> list = new ArrayList<>();
+            Tale tale = null;
+            Date date = new Date();
 
-                if(StringUtils.isBlank(tale.getContent())) {
-                    // 替换掉内容里面的空格
-                    tale.setContent(line.replaceAll(" ", ""));
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+                // 故事类别
+                if (line.contains("（") && line.contains("）") && line.contains("类")) {
+                    if (tale != null) {
+                        list.add(tale);
+                    }
+                    tale = new Tale();
+                    tale.setType(type);
+                    tale.setCreateby("system");
+                    tale.setCreatedate(date);
+                    tale.setTitle(line);
                 } else {
-                    tale.setContent(tale.getContent() + "\n" + line);
+                    if (tale == null) {
+                        continue;
+                    }
+
+                    if (StringUtils.isBlank(tale.getContent())) {
+                        // 替换掉内容里面的空格
+                        tale.setContent(line.replaceAll(" ", ""));
+                    } else {
+                        tale.setContent(tale.getContent() + "\n" + line);
+                    }
                 }
             }
-        }
-        if (tale != null) {
-            list.add(tale);
-        }
+            if (tale != null) {
+                list.add(tale);
+            }
 
-        System.out.println(list.size());
-        System.out.println(list);
-
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
