@@ -64,6 +64,31 @@
 				padding: 10px 5px;
 			}
 
+			.yellowBg {
+				background-color: #f6f4ec;
+				margin-left: 15px;
+			}
+
+			.greenBg {
+				background-color: #e6f0e6;
+				margin-left: 15px;
+			}
+
+			.blueBg {
+				background-color: #e3f5fa;
+				margin-left: 15px;
+			}
+
+			.orangeBg {
+				background-color: #f0e6db;
+				margin-left: 15px;
+			}
+
+			.pinkBg {
+				background-color: #f5e9ef;
+				margin-left: 15px;
+			}
+
 		</style>
 	</head>
 
@@ -129,6 +154,18 @@
 						当前在线人数：{{counter}}
 					</li>
 				</ul>
+
+				  <button class="yellowBg" @click="changeBg('#f6f4ec')">
+				  </button>
+				  <button class="greenBg" @click="changeBg('#e6f0e6')">
+				  </button>
+				  <button class="blueBg" @click="changeBg('#e3f5fa')">
+				  </button>
+				  <button class="orangeBg" @click="changeBg('#f0e6db')">
+				  </button>
+				  <button class="pinkBg" @click="changeBg('#f5e9ef')">
+				  </button>
+
 		      </div>
 		    </div>
 		  </aside>
@@ -192,7 +229,7 @@
 					timer: '',
 					counter: 0,
 				},
-				created: function () {
+				created: function () { //在模板渲染成html前调用，即通常初始化某些属性值，然后再渲染成视图。
 					this.getData(1);
 					this.getMyth('神话');
 					this.getMyth('传说');
@@ -304,12 +341,21 @@
 								.catch(function (error) {
 									console.log(error);
 								});
+					},
+					changeBg: function (color) {
+						document.getElementsByClassName("tale-content")[0].style="background-color:" + color;
+						sessionStorage.setItem("bgColor", color);
 					}
 				},
-				mounted() {
+				mounted: function () { //在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作。
 					this.timer = setInterval(this.getCounter, 8000);
+					// 设置背景色
+					var bgColor = sessionStorage.getItem("bgColor");
+					if (bgColor != null) {
+						document.getElementsByClassName("tale-content")[0].style="background-color:" + bgColor;
+					}
 				},
-				beforeDestroy() {
+				beforeDestroy: function () {
 					clearInterval(this.timer);
 				}
 			});
