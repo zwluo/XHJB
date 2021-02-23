@@ -301,6 +301,11 @@
 										console.log(error);
 									});
 						}
+						// 设置背景色
+						var bgColor = sessionStorage.getItem("bgColor");
+						if (bgColor != null) {
+							document.getElementsByClassName("tale-content")[0].style="background-color:" + bgColor;
+						}
 					},
 					getMyth: function (type) {
 						const that = this;
