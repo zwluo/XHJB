@@ -10,4 +10,3 @@
 建表语句以及故事原始TXT文档在 resources/static/sql 目录下，可自行查阅。
 
 因为本身需要，切换故事后，滑块不会自动回到起点，所以修改了mui.min.js的源码，另外也因为mui的滑动效果，屏蔽了div标签和a标签的@click事件。
-ceshi
