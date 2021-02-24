@@ -66,27 +66,35 @@
 
 			.yellowBg {
 				background-color: #f6f4ec;
-				margin-left: 15px;
 			}
 
 			.greenBg {
 				background-color: #e6f0e6;
-				margin-left: 15px;
 			}
 
 			.blueBg {
 				background-color: #e3f5fa;
-				margin-left: 15px;
 			}
 
 			.orangeBg {
 				background-color: #f0e6db;
-				margin-left: 15px;
 			}
 
 			.pinkBg {
 				background-color: #f5e9ef;
-				margin-left: 15px;
+			}
+
+			.bgBt {
+				width: 15%;
+				height: 20px;
+			}
+
+			.bgDiv {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-around;
+				padding-left: 10px;
+				padding-right: 10px;
 			}
 
 		</style>
@@ -154,17 +162,14 @@
 						当前在线人数：{{counter}}
 					</li>
 				</ul>
+				  <div class="bgDiv">
 
-				  <button class="yellowBg" @click="changeBg('#f6f4ec')">
-				  </button>
-				  <button class="greenBg" @click="changeBg('#e6f0e6')">
-				  </button>
-				  <button class="blueBg" @click="changeBg('#e3f5fa')">
-				  </button>
-				  <button class="orangeBg" @click="changeBg('#f0e6db')">
-				  </button>
-				  <button class="pinkBg" @click="changeBg('#f5e9ef')">
-				  </button>
+				  <button class="yellowBg bgBt" @click="changeBg('#f6f4ec')"></button>
+				  <button class="greenBg bgBt" @click="changeBg('#e6f0e6')"></button>
+				  <button class="blueBg bgBt" @click="changeBg('#e3f5fa')"></button>
+				  <button class="orangeBg bgBt" @click="changeBg('#f0e6db')"></button>
+				  <button class="pinkBg bgBt" @click="changeBg('#f5e9ef')"></button>
+				  </div>
 
 		      </div>
 		    </div>
@@ -244,9 +249,15 @@
 						const that = this;
 
 						// 切换内容时，定位到最上面
-						document.getElementsByClassName("tale-content")[0].style='transform: translate3d(0px, 0px, 0px) translateZ(0px);';
+						document.getElementsByClassName("tale-content")[0].style.transform = "translate3d(0px, 0px, 0px) translateZ(0px)";
 						// 初始化滑块位置
 						localFlag = true;
+
+						// 设置背景色
+						var bgColor = sessionStorage.getItem("bgColor");
+						if (bgColor != null) {
+							document.getElementsByClassName("tale-content")[0].style.backgroundColor = bgColor;
+						}
 
 						// 先去浏览器缓存中取值
 						var paramsTemp = JSON.parse(sessionStorage.getItem(id));
@@ -259,7 +270,7 @@
 
 							// 对于统计表，修改字体大小
 							if("各乡镇入选作品" == that.title) {
-								document.getElementsByClassName("tale-content")[0].style="font-size:15px;";
+								document.getElementsByClassName("tale-content")[0].style.fontSize = "15px";
 							}
 
 							// 当网络较卡时，需要等数据都填充到模板之中才展示出来
@@ -288,7 +299,7 @@
 
 											// 对于统计表，修改字体大小
 											if("各乡镇入选作品" == that.title) {
-												document.getElementsByClassName("tale-content")[0].style="font-size:15px;";
+												document.getElementsByClassName("tale-content")[0].style.fontSize = "15px";
 											}
 
 											// 当网络较卡时，需要等数据都填充到模板之中才展示出来
@@ -300,11 +311,6 @@
 									.catch(function (error) {
 										console.log(error);
 									});
-						}
-						// 设置背景色
-						var bgColor = sessionStorage.getItem("bgColor");
-						if (bgColor != null) {
-							document.getElementsByClassName("tale-content")[0].style="background-color:" + bgColor;
 						}
 					},
 					getMyth: function (type) {
@@ -348,7 +354,7 @@
 								});
 					},
 					changeBg: function (color) {
-						document.getElementsByClassName("tale-content")[0].style="background-color:" + color;
+						document.getElementsByClassName("tale-content")[0].style.backgroundColor = color;
 						sessionStorage.setItem("bgColor", color);
 					}
 				},
@@ -357,7 +363,7 @@
 					// 设置背景色
 					var bgColor = sessionStorage.getItem("bgColor");
 					if (bgColor != null) {
-						document.getElementsByClassName("tale-content")[0].style="background-color:" + bgColor;
+						document.getElementsByClassName("tale-content")[0].style.backgroundColor = bgColor;
 					}
 				},
 				beforeDestroy: function () {
