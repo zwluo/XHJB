@@ -264,10 +264,8 @@
 							// 动态设置样式
 							if (that.type == "歌谣") {
 								document.getElementsByClassName("tale-content")[0].className = "mui-scroll tale-content ballad";
-								console.log(that.type + "mui-scroll tale-content ballad");
 							} else {
 								document.getElementsByClassName("tale-content")[0].className = "mui-scroll tale-content";
-								console.log(that.type + "mui-scroll tale-content");
 							}
 						} else {
 							axios.get("/XHJB/getTale/" + id)
