@@ -184,15 +184,7 @@
 		    </header>
 			
 		    <div id="offCanvasContentScroll" class="mui-content mui-scroll-wrapper">
-				<div class="mui-scroll tale-content ballad" v-if="type == '歌谣'">
-					<!-- 主界面具体展示内容 -->
-					<p v-for="paragraph in paragraphs">{{paragraph}}</p>
-					<div style="text-align: center;">
-						<p>口述人：{{narrator}}　搜集人：{{recorder}}</p>
-					</div>
-				</div>
-
-				<div v-show="showContent" class="mui-scroll tale-content" v-else>
+				<div v-show="showContent" class="mui-scroll tale-content">
 					<!-- 主界面具体展示内容 -->
 					<p v-for="paragraph in paragraphs">{{paragraph}}</p>
 
@@ -247,17 +239,10 @@
 				methods: {
 					getData: function (id) {
 						const that = this;
-
 						// 切换内容时，定位到最上面
 						document.getElementsByClassName("tale-content")[0].style.transform = "translate3d(0px, 0px, 0px) translateZ(0px)";
 						// 初始化滑块位置
 						localFlag = true;
-
-						// 设置背景色
-						var bgColor = sessionStorage.getItem("bgColor");
-						if (bgColor != null) {
-							document.getElementsByClassName("tale-content")[0].style.backgroundColor = bgColor;
-						}
 
 						// 先去浏览器缓存中取值
 						var paramsTemp = JSON.parse(sessionStorage.getItem(id));
@@ -275,6 +260,15 @@
 
 							// 当网络较卡时，需要等数据都填充到模板之中才展示出来
 							that.showContent = true;
+
+							// 动态设置样式
+							if (that.type == "歌谣") {
+								document.getElementsByClassName("tale-content")[0].className = "mui-scroll tale-content ballad";
+								console.log(that.type + "mui-scroll tale-content ballad");
+							} else {
+								document.getElementsByClassName("tale-content")[0].className = "mui-scroll tale-content";
+								console.log(that.type + "mui-scroll tale-content");
+							}
 						} else {
 							axios.get("/XHJB/getTale/" + id)
 									.then(function (response) {
@@ -285,7 +279,6 @@
 											that.paragraphs = data.paragraphs;
 											that.narrator = data.narrator;
 											that.recorder = data.recorder;
-
 
 											// 将故事内容缓存到浏览器中
 											var params = {
@@ -304,6 +297,15 @@
 
 											// 当网络较卡时，需要等数据都填充到模板之中才展示出来
 											that.showContent = true;
+
+											// 动态设置样式
+											if (that.type == "歌谣") {
+												document.getElementsByClassName("tale-content")[0].className = "mui-scroll tale-content ballad";
+												console.log(that.type + "mui-scroll tale-content ballad");
+											} else {
+												document.getElementsByClassName("tale-content")[0].className = "mui-scroll tale-content";
+												console.log(that.type + "mui-scroll tale-content");
+											}
 										} else {
 											alert('访问错误,请检查网络');
 										}
@@ -312,6 +314,13 @@
 										console.log(error);
 									});
 						}
+
+						// 设置背景色
+						var bgColor = sessionStorage.getItem("bgColor");
+						if (bgColor != null) {
+							document.getElementsByClassName("tale-content")[0].style.backgroundColor = bgColor;
+						}
+
 					},
 					getMyth: function (type) {
 						const that = this;
