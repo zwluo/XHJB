@@ -93,8 +93,6 @@
 				display: flex;
 				flex-direction: row;
 				justify-content: space-around;
-				padding-left: 10px;
-				padding-right: 10px;
 			}
 
 		</style>
@@ -159,17 +157,26 @@
 						</div>
 					</li>
 					<li class="mui-table-view-cell mui-collapse">
+						<a class="mui-navigate-right" href="#">样式调整</a>
+						<div class="mui-collapse-content title-bar">
+							<div class="bgDiv">
+								<button class="yellowBg bgBt" @click="changeBg('#f6f4ec')"></button>
+								<button class="greenBg bgBt" @click="changeBg('#e6f0e6')"></button>
+								<button class="blueBg bgBt" @click="changeBg('#e3f5fa')"></button>
+								<button class="orangeBg bgBt" @click="changeBg('#f0e6db')"></button>
+								<button class="pinkBg bgBt" @click="changeBg('#f5e9ef')"></button>
+							</div>
+							<br/>
+							<div class="bgDiv">
+								<button class="" @click="changeFontSize('-1')">A-</button>
+								<button class="" @click="changeFontSize('1')">A+</button>
+							</div>
+						</div>
+					</li>
+					<li class="mui-table-view-cell mui-collapse">
 						当前在线人数：{{counter}}
 					</li>
 				</ul>
-				  <div class="bgDiv">
-
-				  <button class="yellowBg bgBt" @click="changeBg('#f6f4ec')"></button>
-				  <button class="greenBg bgBt" @click="changeBg('#e6f0e6')"></button>
-				  <button class="blueBg bgBt" @click="changeBg('#e3f5fa')"></button>
-				  <button class="orangeBg bgBt" @click="changeBg('#f0e6db')"></button>
-				  <button class="pinkBg bgBt" @click="changeBg('#f5e9ef')"></button>
-				  </div>
 
 		      </div>
 		    </div>
@@ -243,6 +250,12 @@
 						document.getElementsByClassName("tale-content")[0].style.transform = "translate3d(0px, 0px, 0px) translateZ(0px)";
 						// 初始化滑块位置
 						localFlag = true;
+
+						// 设置字体
+						var fontSize = sessionStorage.getItem("fontSize");
+						if (fontSize != null) {
+							document.getElementsByClassName("tale-content")[0].style.fontSize = fontSize + "px";
+						}
 
 						// 先去浏览器缓存中取值
 						var paramsTemp = JSON.parse(sessionStorage.getItem(id));
@@ -361,6 +374,22 @@
 					changeBg: function (color) {
 						document.getElementsByClassName("tale-content")[0].style.backgroundColor = color;
 						sessionStorage.setItem("bgColor", color);
+					},
+					changeFontSize: function (ops) {
+						var fontSize = sessionStorage.getItem("fontSize");
+						if (fontSize == null) {
+							// 默认字体大小为18px;
+							fontSize = "18";
+						}
+
+						if(ops == "-1") {
+							fontSize = parseInt(fontSize) - 1;
+						} else {
+							fontSize = parseInt(fontSize) + 1;
+						}
+						document.getElementsByClassName("tale-content")[0].style.fontSize = (fontSize+1) + "px";
+						// 将字体大小添加到缓存中
+						sessionStorage.setItem("fontSize", fontSize);
 					}
 				},
 				mounted: function () { //在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作。
@@ -369,6 +398,11 @@
 					var bgColor = sessionStorage.getItem("bgColor");
 					if (bgColor != null) {
 						document.getElementsByClassName("tale-content")[0].style.backgroundColor = bgColor;
+					}
+					// 设置字体
+					var fontSize = sessionStorage.getItem("fontSize");
+					if (fontSize != null) {
+						document.getElementsByClassName("tale-content")[0].style.fontSize = fontSize + "px";
 					}
 				},
 				beforeDestroy: function () {
