@@ -1,11 +1,13 @@
 package com.maoqi.xhjb.controller;
 
+import com.maoqi.xhjb.pojo.dbbean.Feedback;
+import com.maoqi.xhjb.pojo.vo.FeedbackVO;
 import com.maoqi.xhjb.pojo.vo.TaleVO;
 import com.maoqi.xhjb.service.impl.TaleServiceImpl;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import com.maoqi.xhjb.util.IpUtil;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -56,4 +58,17 @@ public class TaleController {
         return taleService.getOnlineCounter();
     }
 
+    /**
+     * 将故事从 TXT 文档导入到数据库中
+     * @return 导入结果
+     */
+    @PostMapping("/addFeedback")
+    public String addFeedback(@RequestBody FeedbackVO feedbackVO, HttpServletRequest request) {
+        String ip = IpUtil.getIpAddr(request);
+        feedbackVO.setIp(ip);
+
+        Feedback feedback = new Feedback(feedbackVO);
+        taleService.saveFeedback(feedback);
+        return "success";
+    }
 }

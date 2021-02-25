@@ -1,6 +1,7 @@
 package com.maoqi.xhjb.dao.impl;
 
 import com.maoqi.xhjb.dao.TaleDao;
+import com.maoqi.xhjb.pojo.dbbean.Feedback;
 import com.maoqi.xhjb.pojo.dbbean.Tale;
 import com.maoqi.xhjb.pojo.dbbean.VisitLog;
 import com.maoqi.xhjb.pojo.vo.TaleVO;
@@ -82,6 +83,18 @@ public class TaleDaoImpl implements TaleDao {
 
     @Override
     public void saveVisitLog(VisitLog item) {
+        template.persist(item);
+        try {
+            template.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            template.clear();
+        }
+    }
+
+    @Override
+    public void saveFeedback(Feedback item) {
         template.persist(item);
         try {
             template.flush();

@@ -97,6 +97,15 @@
 				align-items: center;
 			}
 
+			.feedbackDiv {
+				/*设置图片透明度*/
+				opacity:0.3;
+				position: fixed;
+				bottom: 10px;
+				right: 15px;
+				z-index: 999;
+			}
+
 		</style>
 	</head>
 
@@ -206,6 +215,18 @@
 						<p>口述人：{{narrator}}　搜集人：{{recorder}}</p>
 					</div>
 
+					<br/>
+					<div v-show="isShowFeedback" style="text-align: center;">
+						<textarea placeholder="反馈内容：可以是错别字提醒，可以是样式建议，也可以是新的民间故事"></textarea>
+						<button @click="saveFeedback()">提交</button>
+					</div>
+
+					<div class="feedbackDiv">
+						<button @click="showFeedback()" style="background-color: #ffffff00;padding: 3px 3px 0px 5px;">
+							<!--穿透图片的点击事件-->
+							<img src="img/edit.png" alt="反馈" style="pointer-events: none;width: 25px;" />
+						</button>
+					</div>
 				</div>
 		    </div>
 			
@@ -213,7 +234,7 @@
 			<div class="mui-off-canvas-backdrop"></div>
 		  </div>
 		</div>
-		
+
 		<script type="text/javascript">
 			// 用于修改mui.min.js里面的监听方法，保证切换故事时，初始化滑块位置
 			var localFlag = false;
@@ -236,6 +257,7 @@
 					timer: '',
 					counter: 0,
 					fontSize: 18,
+					isShowFeedback: false,
 				},
 				created: function () { //在模板渲染成html前调用，即通常初始化某些属性值，然后再渲染成视图。
 					this.getData(1);
@@ -250,6 +272,12 @@
 				methods: {
 					getData: function (id) {
 						const that = this;
+
+						// 关闭反馈框
+						if (that.isShowFeedback == true) {
+							that.isShowFeedback = false;
+						}
+
 						// 切换内容时，定位到最上面
 						document.getElementsByClassName("tale-content")[0].style.transform = "translate3d(0px, 0px, 0px) translateZ(0px)";
 						// 初始化滑块位置
@@ -396,6 +424,38 @@
 						document.getElementsByClassName("tale-content")[0].style.fontSize = fontSize + "px";
 						// 将字体大小添加到缓存中
 						sessionStorage.setItem("fontSize", fontSize);
+					},
+					showFeedback: function () {
+						if (this.isShowFeedback == false) {
+							this.isShowFeedback = true;
+							// 定位
+							//document.getElementsByTagName("textarea")[0].focus();
+						} else {
+							this.isShowFeedback = false;
+						}
+					},
+					saveFeedback: function () {
+						var content = document.getElementsByTagName("textarea")[0].value;
+						if (content != null && content != "") {
+							axios.post("/XHJB/addFeedback", {
+								type: this.type,
+								title: this.title,
+								content: content
+							})
+									.then(function (response) {
+										if (response.data) {
+											mui.alert("提交成功");
+											document.getElementsByTagName("textarea")[0].value = "";
+										} else {
+											mui.alert('访问错误,请检查网络');
+										}
+									})
+									.catch(function (error) {
+										console.log(error);
+									});
+						} else {
+							mui.alert("内容为空！");
+						}
 					}
 				},
 				mounted: function () { //在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作。

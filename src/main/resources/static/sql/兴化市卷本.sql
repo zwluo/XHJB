@@ -24,3 +24,15 @@ create table visit_log
     createdate datetime comment '创建时间' default now(),
     createby   varchar(20) comment '创建人' default 'system'
 );
+
+-- 反馈表
+create table feedback
+(
+    id         Int primary key auto_increment comment '编号',
+    type      varchar(50) comment '栏目分类',
+    title       varchar(50) comment '标题',
+    content    text comment '反馈内容',
+    ip      varchar(50) comment '访问者IP',
+    createdate TIMESTAMP comment '创建时间' default now(),
+    createby   varchar(20) comment '创建人' default 'system'
+);

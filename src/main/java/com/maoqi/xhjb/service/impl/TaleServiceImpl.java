@@ -1,6 +1,7 @@
 package com.maoqi.xhjb.service.impl;
 
 import com.maoqi.xhjb.dao.impl.TaleDaoImpl;
+import com.maoqi.xhjb.pojo.dbbean.Feedback;
 import com.maoqi.xhjb.pojo.dbbean.Tale;
 import com.maoqi.xhjb.pojo.vo.TaleVO;
 import com.maoqi.xhjb.service.TaleService;
@@ -54,6 +55,11 @@ public class TaleServiceImpl implements TaleService {
     @Override
     public int getOnlineCounter() {
         return taleDao.getOnlineCounter();
+    }
+
+    @Override
+    public void saveFeedback(Feedback feedback) {
+        taleDao.saveFeedback(feedback);
     }
 
     /**

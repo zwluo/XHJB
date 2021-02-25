@@ -1,0 +1,14 @@
+package com.maoqi.xhjb.pojo.vo;
+
+import lombok.Data;
+
+@Data
+public class FeedbackVO {
+
+    private long id;
+    private String type;
+    private String title;
+    private String content;
+    private String ip;
+
+}

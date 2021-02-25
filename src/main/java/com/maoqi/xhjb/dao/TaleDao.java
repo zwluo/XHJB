@@ -1,5 +1,6 @@
 package com.maoqi.xhjb.dao;
 
+import com.maoqi.xhjb.pojo.dbbean.Feedback;
 import com.maoqi.xhjb.pojo.dbbean.Tale;
 import com.maoqi.xhjb.pojo.dbbean.VisitLog;
 import com.maoqi.xhjb.pojo.vo.TaleVO;
@@ -37,4 +38,10 @@ public interface TaleDao {
      * 导入访问日志
      */
     void saveVisitLog(VisitLog item);
+
+    /**
+     * 保存反馈内容
+     * @param feedback 反馈内容
+     */
+    void saveFeedback(Feedback feedback);
 }

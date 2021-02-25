@@ -1,5 +1,6 @@
 package com.maoqi.xhjb.service;
 
+import com.maoqi.xhjb.pojo.dbbean.Feedback;
 import com.maoqi.xhjb.pojo.vo.TaleVO;
 import org.springframework.stereotype.Service;
 
@@ -32,4 +33,10 @@ public interface TaleService {
      * @return 在线人数
      */
     int getOnlineCounter();
+
+    /**
+     * 保存反馈的内容
+     * @param feedback 反馈内容
+     */
+    void saveFeedback(Feedback feedback);
 }
