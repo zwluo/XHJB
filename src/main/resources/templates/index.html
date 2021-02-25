@@ -441,6 +441,10 @@
 					saveFeedback: function () {
 						var content = document.getElementsByTagName("textarea")[0].value;
 						if (content != null && content != "") {
+							if(content.length > 20000) {
+								mui.alert("反馈内容过多，请删减！");
+								return;
+							}
 							axios.post("/XHJB/addFeedback", {
 								type: this.type,
 								title: this.title,
@@ -458,7 +462,7 @@
 										console.log(error);
 									});
 						} else {
-							mui.alert("内容为空！");
+							mui.alert("反馈内容为空！");
 						}
 					}
 				},
