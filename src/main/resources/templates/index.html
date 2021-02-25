@@ -93,6 +93,8 @@
 				display: flex;
 				flex-direction: row;
 				justify-content: space-around;
+				/*垂直居中*/
+				align-items: center;
 			}
 
 		</style>
@@ -169,6 +171,7 @@
 							<br/>
 							<div class="bgDiv">
 								<button @click="changeFontSize('-1')">A-</button>
+								<span>{{fontSize}}</span>
 								<button @click="changeFontSize('1')">A+</button>
 							</div>
 						</div>
@@ -232,6 +235,7 @@
 					columns6: [id='',title=''],
 					timer: '',
 					counter: 0,
+					fontSize: 18,
 				},
 				created: function () { //在模板渲染成html前调用，即通常初始化某些属性值，然后再渲染成视图。
 					this.getData(1);
@@ -251,7 +255,7 @@
 						// 初始化滑块位置
 						localFlag = true;
 
-						// 设置字体
+						// 设置字体，用于从各乡镇入选作品切换到其他栏目时字体变小的问题
 						var fontSize = sessionStorage.getItem("fontSize");
 						if (fontSize != null) {
 							document.getElementsByClassName("tale-content")[0].style.fontSize = fontSize + "px";
@@ -376,6 +380,7 @@
 						sessionStorage.setItem("bgColor", color);
 					},
 					changeFontSize: function (ops) {
+						const that = this;
 						var fontSize = sessionStorage.getItem("fontSize");
 						if (fontSize == null) {
 							// 默认字体大小为18px;
@@ -387,7 +392,8 @@
 						} else {
 							fontSize = parseInt(fontSize) + 1;
 						}
-						document.getElementsByClassName("tale-content")[0].style.fontSize = (fontSize+1) + "px";
+						that.fontSize = fontSize;
+						document.getElementsByClassName("tale-content")[0].style.fontSize = fontSize + "px";
 						// 将字体大小添加到缓存中
 						sessionStorage.setItem("fontSize", fontSize);
 					}
@@ -403,6 +409,7 @@
 					var fontSize = sessionStorage.getItem("fontSize");
 					if (fontSize != null) {
 						document.getElementsByClassName("tale-content")[0].style.fontSize = fontSize + "px";
+						this.fontSize = fontSize;
 					}
 				},
 				beforeDestroy: function () {
