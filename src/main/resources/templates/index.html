@@ -52,10 +52,14 @@
 			}
 
 			button {
-				color: white;
+				color: #efefef;
 				background: #242424;
 				border-radius: 10px;
 				border-color: #ffffff36;
+			}
+
+			.mui-table-view-inverted {
+				color: #efefef;
 			}
 
 			.ballad {
@@ -420,9 +424,13 @@
 						}
 
 						if(ops == "-1") {
-							fontSize = parseInt(fontSize) - 1;
+							if (fontSize > 1) {
+								fontSize = parseInt(fontSize) - 1;
+							}
 						} else {
-							fontSize = parseInt(fontSize) + 1;
+							if (fontSize < 50) {
+								fontSize = parseInt(fontSize) + 1;
+							}
 						}
 						that.fontSize = fontSize;
 						document.getElementsByClassName("tale-content")[0].style.fontSize = fontSize + "px";
