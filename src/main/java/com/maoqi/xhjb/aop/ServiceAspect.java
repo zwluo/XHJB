@@ -3,6 +3,7 @@ package com.maoqi.xhjb.aop;
 import com.alibaba.fastjson.JSON;
 import com.maoqi.xhjb.dao.impl.TaleDaoImpl;
 import com.maoqi.xhjb.pojo.dbbean.VisitLog;
+import com.maoqi.xhjb.pojo.vo.TaleVO;
 import com.maoqi.xhjb.util.IpUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -64,13 +65,15 @@ public class ServiceAspect {
             logMap1.put(parameterNames[i++], argValue);
         }
 
+        TaleVO taleVO = (TaleVO)pjp.proceed();
+
         VisitLog visitLog = new VisitLog();
         visitLog.setMethod(signature.getName());
         visitLog.setRequest(logMap1.toString());
-        //visitLog.setResponse(String.valueOf(result));
+        visitLog.setResponse(taleVO.getTitle());
         visitLog.setIp(IpUtil.getIpAddr(request));
         taleDao.saveVisitLog(visitLog);
 
-        return pjp.proceed();
+        return taleVO;
     }
 }

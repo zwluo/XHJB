@@ -113,6 +113,8 @@
 
 			textarea {
 				height: 90px;
+				margin-top: 10px;
+				margin-bottom: 0px;
 			}
 
 		</style>
@@ -202,7 +204,7 @@
 		      </div>
 		    </div>
 		  </aside>
-		  
+
 		  <!-- 主页面部分 -->
 		  <div class="mui-inner-wrap">
 		    <!-- 主页面标题 -->
@@ -225,13 +227,9 @@
 					</div>
 
 					<br/>
-					<div v-show="isShowFeedback" style="text-align: center;">
-						<textarea placeholder="反馈内容：可以是错别字提醒，可以是样式建议，也可以是新的民间故事"></textarea>
-						<button @click="saveFeedback()">提交</button>
-					</div>
 
 					<div class="feedbackDiv">
-						<button @click="showFeedback()" style="background-color: #ffffff00;padding: 3px 3px 0px 5px;">
+						<button @click="showFeedback()" style="background-color: initial;padding: 3px 3px 0px 5px;">
 							<!--穿透图片的点击事件-->
 							<img src="img/edit.png" alt="反馈" style="pointer-events: none;width: 25px;" />
 						</button>
@@ -266,7 +264,6 @@
 					timer: '',
 					counter: 0,
 					fontSize: 18,
-					isShowFeedback: false,
 				},
 				created: function () { //在模板渲染成html前调用，即通常初始化某些属性值，然后再渲染成视图。
 					this.getData(1);
@@ -281,11 +278,6 @@
 				methods: {
 					getData: function (id) {
 						const that = this;
-
-						// 关闭反馈框
-						if (that.isShowFeedback == true) {
-							that.isShowFeedback = false;
-						}
 
 						// 切换内容时，定位到最上面
 						document.getElementsByClassName("tale-content")[0].style.transform = "translate3d(0px, 0px, 0px) translateZ(0px)";
@@ -322,7 +314,7 @@
 								document.getElementsByClassName("tale-content")[0].className = "mui-scroll tale-content";
 							}
 						} else {
-							axios.get("/XHJB/getTale/" + id)
+							axios.get("/getTale/" + id)
 									.then(function (response) {
 										if (response.data) {
 											var data = response.data;
@@ -374,7 +366,7 @@
 					},
 					getMyth: function (type) {
 						const that = this;
-						axios.get("/XHJB/getTalesByType/" + type)
+						axios.get("/getTalesByType/" + type)
 								.then(function (response) {
 									if (response.data) {
 										if("神话" == type) {
@@ -400,7 +392,7 @@
 					},
 					getCounter: function () {
 						const that = this;
-						axios.get("/XHJB/getCounter")
+						axios.get("/getCounter")
 								.then(function (response) {
 									if (response.status == 200) {
 										that.counter = response.data;
@@ -439,30 +431,32 @@
 						sessionStorage.setItem("fontSize", fontSize);
 					},
 					showFeedback: function () {
-						if (this.isShowFeedback == false) {
-							this.isShowFeedback = true;
-							// 定位
-							//document.getElementsByTagName("textarea")[0].focus();
-						} else {
-							this.isShowFeedback = false;
-						}
+						const that = this;
+						var btnArray = ['提交', '取消'];
+						mui.prompt('', '示例：可以是错别字提醒，可以是样式建议，也可以是新的民间故事', '留言', btnArray, function(e) {
+							if (e.index == 0) {
+								// 失去焦点
+								document.getElementsByTagName("textarea")[0].blur();
+								var content = document.getElementsByTagName("textarea")[0].value;
+								that.saveFeedback(content);
+							}
+						})
 					},
-					saveFeedback: function () {
-						var content = document.getElementsByTagName("textarea")[0].value;
+					saveFeedback: function (content) {
+						const that = this;
 						if (content != null && content != "") {
 							if(content.length > 20000) {
 								mui.alert("反馈内容过多，请删减！");
 								return;
 							}
-							axios.post("/XHJB/addFeedback", {
-								type: this.type,
-								title: this.title,
+							axios.post("/addFeedback", {
+								type: that.type,
+								title: that.title,
 								content: content
 							})
 									.then(function (response) {
 										if (response.data) {
 											mui.alert("提交成功");
-											document.getElementsByTagName("textarea")[0].value = "";
 										} else {
 											mui.alert('访问错误,请检查网络');
 										}
