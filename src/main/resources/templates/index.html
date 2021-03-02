@@ -12,6 +12,28 @@
     <script type="text/javascript">$J = jQuery.noConflict();</script>
     <script type="text/javascript" src="js/shared_responsive_adapter.js"></script>
 
+    <style>
+
+        .tale-content {
+            background: #c8e8c8;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-family: sans-serif;
+            line-height: 1.8;
+            /*每行字体平均分布*/
+            text-align: justify;
+            /*阴影*/
+            box-shadow: 0 0 15px 0 #ccc;
+        }
+
+        p {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+
+    </style>
+
 </head>
 <body class="v6 responsive_page">
 <div class="responsive_page_frame with_header main">
@@ -22,12 +44,44 @@
                     <div style="text-align: center;">
                         <a style="padding-top: 16px;" class="menuitem"> <img src="img/xhjb.jpg"/> </a>
                     </div>
+
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store">神 话</a>
-
-                    <div class="submenu_store" style="display: none;"  data-submenuid="store" v-for="column in columns">
-                        <a class="submenuitem" @click="getData(column.id)">{{column.title}}</a>
+                    <div class="submenu_store" style="display: none;"  data-submenuid="store">
+                        <a class="submenuitem" @click="getData(column.id)" v-for="column in columns">{{column.title}}</a>
                     </div>
+
+                    <a class="menuitem supernav" data-tooltip-type="selector"
+                       data-tooltip-content=".submenu_store2">传 说</a>
+                    <div class="submenu_store2" style="display: none;"  data-submenuid="store2">
+                        <a class="submenuitem" @click="getData(column.id)" v-for="column in columns2">{{column.title}}</a>
+                    </div>
+
+                    <a class="menuitem supernav" data-tooltip-type="selector"
+                       data-tooltip-content=".submenu_store3">故 事</a>
+                    <div class="submenu_store3" style="display: none;"  data-submenuid="store3">
+                        <a class="submenuitem" @click="getData(column.id)" v-for="column in columns3">{{column.title}}</a>
+                    </div>
+
+                    <a class="menuitem supernav" data-tooltip-type="selector"
+                       data-tooltip-content=".submenu_store4">歌 谣</a>
+                    <div class="submenu_store4" style="display: none;"  data-submenuid="store4">
+                        <a class="submenuitem" @click="getData(column.id)" v-for="column in columns4">{{column.title}}</a>
+                    </div>
+
+                    <a class="menuitem supernav" data-tooltip-type="selector"
+                       data-tooltip-content=".submenu_store5">谚 语</a>
+                    <div class="submenu_store5" style="display: none;"  data-submenuid="store5">
+                        <a class="submenuitem" @click="getData(column.id)" v-for="column in columns5">{{column.title}}</a>
+                    </div>
+
+                    <a class="menuitem supernav" data-tooltip-type="selector"
+                       data-tooltip-content=".submenu_store6">关于本书</a>
+                    <div class="submenu_store6" style="display: none;"  data-submenuid="store6">
+                        <a class="submenuitem" @click="getData(column.id)" v-for="column in columns6">{{column.title}}</a>
+                    </div>
+
+
 
                     <a class="menuitem supernav" style="display: block" href="https://steamcommunity.com/"
                        data-tooltip-type="selector" data-tooltip-content=".submenu_community"> 社区 </a>
