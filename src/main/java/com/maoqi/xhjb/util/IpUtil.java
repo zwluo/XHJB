@@ -42,4 +42,19 @@ public class IpUtil {
 
         return ipAddress;
     }
+
+    public static String getUserAgent(HttpServletRequest request) {
+        String userAgent = null;
+        try {
+            userAgent = request.getHeader("User-Agent");
+        } catch (Exception e) {
+            userAgent = "";
+        }
+        if (userAgent != null && userAgent.length() > 900) {
+            userAgent = userAgent.substring(0, 900);
+        }
+
+        return userAgent;
+    }
+
 }

@@ -345,7 +345,8 @@
 							axios.post("/addFeedback", {
 								type: that.type,
 								title: that.title,
-								content: content
+								content: content,
+								useragent: window.navigator.userAgent
 							})
 									.then(function (response) {
 										if (response.data) {

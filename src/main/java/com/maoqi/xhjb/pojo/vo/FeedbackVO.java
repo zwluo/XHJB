@@ -9,6 +9,7 @@ public class FeedbackVO {
     private String type;
     private String title;
     private String content;
+    private String useragent;
     private String ip;
 
 }

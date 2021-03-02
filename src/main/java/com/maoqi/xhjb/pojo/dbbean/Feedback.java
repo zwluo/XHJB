@@ -1,6 +1,7 @@
 package com.maoqi.xhjb.pojo.dbbean;
 
 import com.maoqi.xhjb.pojo.vo.FeedbackVO;
+import com.maoqi.xhjb.util.StringUtils;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -19,6 +20,7 @@ public class Feedback {
   private String title;
   private String content;
   private String ip;
+  private String useragent;
 
   public Feedback() {
   }
@@ -28,6 +30,14 @@ public class Feedback {
     this.title = feedbackVO.getTitle();
     this.content = feedbackVO.getContent();
     this.ip = feedbackVO.getIp();
+
+    if (StringUtils.isNotBlank(feedbackVO.getUseragent())) {
+      if (feedbackVO.getUseragent().length() > 900) {
+        this.useragent = feedbackVO.getUseragent().substring(0, 900);
+      } else {
+        this.useragent = feedbackVO.getUseragent();
+      }
+    }
   }
 
 }

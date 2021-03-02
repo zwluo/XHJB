@@ -21,6 +21,7 @@ create table visit_log
     request      varchar(50) comment '请求参数',
     response       varchar(50) comment '接口返回',
     ip      varchar(50) comment '访问者IP',
+    useragent varchar(1000) comment '访问者设备信息',
     createdate datetime comment '创建时间' default now(),
     createby   varchar(20) comment '创建人' default 'system'
 );
@@ -33,6 +34,7 @@ create table feedback
     title       varchar(50) comment '标题',
     content    text comment '反馈内容',
     ip      varchar(50) comment '访问者IP',
+    useragent varchar(1000) comment '访问者设备信息',
     createdate TIMESTAMP comment '创建时间' default now(),
     createby   varchar(20) comment '创建人' default 'system'
 );

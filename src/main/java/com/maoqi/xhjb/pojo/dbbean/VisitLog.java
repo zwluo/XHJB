@@ -18,5 +18,6 @@ public class VisitLog {
   private String request;
   private String response;
   private String ip;
+  private String useragent;
 
 }

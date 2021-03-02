@@ -72,6 +72,7 @@ public class ServiceAspect {
         visitLog.setRequest(logMap1.toString());
         visitLog.setResponse(taleVO.getTitle());
         visitLog.setIp(IpUtil.getIpAddr(request));
+        visitLog.setUseragent(IpUtil.getUserAgent(request));
         taleDao.saveVisitLog(visitLog);
 
         return taleVO;
