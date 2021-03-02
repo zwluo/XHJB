@@ -1,0 +1,186 @@
+.responsive_page_frame {
+	position: relative;
+}
+
+html.responsive {
+	height: 100%;
+}
+
+body.overflow_hidden .responsive_page_frame {
+	overflow: hidden;
+	position: relative;
+}
+
+html.responsive body {
+	min-height: 100%;
+	height: auto;
+	position: relative;
+}
+
+.responsive_page_frame.mainmenu_active .responsive_page_menu_ctn.mainmenu {
+    left: 0;
+}
+
+.responsive_page_frame.mainmenu_active .responsive_page_menu_ctn.mainmenu, .responsive_page_frame.localmenu_active .responsive_page_menu_ctn.localmenu {
+    box-shadow: 0 0 7px 0 rgb(0 0 0 / 75%);
+}
+.responsive_page_frame:not(.in_menu_drag) .responsive_page_menu_ctn {
+    transition: left 0.5s, right 0.5s;
+}
+.responsive_page_menu_ctn.mainmenu {
+    left: -280px;
+}
+.responsive_page_menu_ctn {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+    background: black;
+    z-index: 30;
+    width: 230px;
+}
+
+.responsive_page_menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.mainmenu_contents {
+    background: #171a21;
+    font-size: 22px;
+    position: relative;
+    min-height: 100%;
+}
+
+.mainmenu_contents_items {
+    font-family: "Motiva Sans", Sans-serif;
+    font-weight: 200;
+}
+.mainmenu_contents .menuitem, .menuitem_submenu_wrapper .inner_borders, .mainmenu .minor_menu_items {
+    border-top: 1px solid #2f3138;
+    border-bottom: 1px solid #000000;
+}
+.mainmenu_contents .menuitem {
+    position: relative;
+    color: #bdbdbd;
+    background: #171a21;
+    transition: background 0.25s, color 0.25s;
+}
+.mainmenu_contents .menuitem, .mainmenu_contents .submenuitem, .notification_submenu .popup_menu_item {
+    display: block;
+    padding: 0 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 2.5em;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.mainmenu_contents .menuitem.submenu_active {
+    background: #192533;
+    color: #ffffff;
+}
+
+.menuitem_submenu_wrapper.active {
+    background: #192533;
+}
+.menuitem_submenu_wrapper {
+    overflow: hidden;
+    background: #171a21;
+    transition: height 0.5s, background 0.25s, color 0.25s;
+}
+
+.mainmenu_contents .menuitem .chevron {
+    background-image: url(../img/arrow.png);
+    background-size: 100% 100%;
+    width: 20px;
+    height: 12px;
+    position: absolute;
+    right: 12px;
+    top: calc( 50% - 6px );
+    transition: transform 0.25s;
+}
+
+html.responsive.touch div.responsive_header {
+    display: block;
+}
+
+html.responsive div.responsive_header {
+    display: block;
+}
+.responsive_header {
+    display: none;
+    background: #171a21;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 20;
+    box-shadow: 0 0 7px 0 rgb(0 0 0 / 75%);
+    overflow: hidden;
+    padding: 13px 8px;
+}
+
+#responsive_menu_logo {
+    left: 8px;
+	position: absolute;
+    top: 9px;
+    cursor: pointer;
+    width: 36px;
+    height: 31px;
+}
+
+.responsive_page_frame.mainmenu_active .responsive_page_content_overlay, .responsive_page_frame.localmenu_active .responsive_page_content_overlay {
+    visibility: visible;
+    opacity: 1.0;
+    transition: visibility 0s, opacity 0.5s;
+}
+.responsive_page_content_overlay {
+    visibility: hidden;
+    opacity: 0;
+    background: rgba( 0, 0, 0, 0.4);
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 25;
+    transition: visibility 0.5s, opacity 0.5s;
+}
+
+html.responsive.touch .responsive_page_frame.with_header div.responsive_page_content {
+    padding-top: 62px;
+}
+
+html.responsive .responsive_page_frame.with_header div.responsive_page_content {
+    padding-top: 62px;
+}
+html.responsive.touch div.responsive_page_content {
+    position: relative;
+    z-index: 10;
+}
+
+html.responsive div.responsive_page_content {
+    position: relative;
+    z-index: 10;
+}
+.menuitem_submenu_wrapper .submenuitem, .notification_submenu .popup_menu_item {
+    display: block;
+    font-size: 0.75em;
+    color: #ffffff;
+    padding-left: 28px;
+}
+.mainmenu_contents .menuitem.submenu_active .chevron {
+    transform: rotate( 180deg );
+    -webkit-transform: rotate( 
+180deg
+ );
+}
