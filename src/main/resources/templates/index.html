@@ -229,7 +229,7 @@
 					<br/>
 
 					<div class="feedbackDiv">
-						<button @click="showFeedback()" style="background-color: initial;padding: 3px 3px 0px 5px;">
+						<button @click="showFeedback()" style="background-color: initial;padding: 3px 3px 0px 5px;border-width: 0px;">
 							<!--穿透图片的点击事件-->
 							<img src="img/edit.png" alt="反馈" style="pointer-events: none;width: 25px;" />
 						</button>
@@ -288,6 +288,9 @@
 						var fontSize = sessionStorage.getItem("fontSize");
 						if (fontSize != null) {
 							document.getElementsByClassName("tale-content")[0].style.fontSize = fontSize + "px";
+						} else {
+							// 将字体大小添加到缓存中
+							sessionStorage.setItem("fontSize", "18");
 						}
 
 						// 先去浏览器缓存中取值
