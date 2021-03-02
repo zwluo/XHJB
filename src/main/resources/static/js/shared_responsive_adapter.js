@@ -70,7 +70,6 @@ jQuery( function($) {
 				$SubmenuWrapper.css( 'height', $Submenu.height() + 'px' );
 				$MenuItem.addClass( 'submenu_active' );
 				$SubmenuWrapper.addClass('active');
-				sessionStorage.setItem("fontSize", "18");
 				sessionStorage.setItem('responsiveMenuLastSubmenu', $Submenu.data('submenuid'));
 			}
 		});

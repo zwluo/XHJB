@@ -1,93 +1,333 @@
 <!DOCTYPE html>
 <html class=" responsive touch" lang="zh-cn">
- <head> 
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
-  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" /> 
-  <title>Steam 客服</title>
-  <link rel="shortcut icon" href="img/home_01.svg" />
-  <link href="css/shared_responsive.css" rel="stylesheet" type="text/css" />
-  <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
-  <script type="text/javascript">$J = jQuery.noConflict();</script>
-  <script type="text/javascript" src="js/shared_responsive_adapter.js"></script>
- </head> 
- <body class="v6 responsive_page"> 
-  <div class="responsive_page_frame with_header"> 
-   <div class="responsive_page_menu_ctn mainmenu"> 
-    <div class="responsive_page_menu" id="responsive_page_menu"> 
-     <div class="mainmenu_contents"> 
-      <div class="mainmenu_contents_items"> 
-       <a class="menuitem" href="https://help.steampowered.com/zh-cn/login/"> 登录 </a> 
-       <a class="menuitem supernav" href="https://store.steampowered.com/" data-tooltip-type="selector" data-tooltip-content=".submenu_store"> 商店 </a> 
-       <div class="submenu_store" style="display: none;" data-submenuid="store"> 
-        <a class="submenuitem" href="https://store.steampowered.com/">主页</a> 
-       </div> 
-       <a class="menuitem supernav" style="display: block" href="https://steamcommunity.com/" data-tooltip-type="selector" data-tooltip-content=".submenu_community"> 社区 </a> 
-       <div class="submenu_community" style="display: none;" data-submenuid="community"> 
-        <a class="submenuitem" href="https://steamcommunity.com/">主页</a> 
-       </div> 
-       <a class="menuitem" href="https://help.steampowered.com/zh-cn/"> 客服 </a> 
-      </div> 
-     </div> 
-    </div> 
-   </div> 
-   <div class="responsive_header"> 
-    <div class="responsive_header_content"> 
-     <div id="responsive_menu_logo"> 
-      <img src="img/menu.png" height="100%" />
-     </div> 
-     <div class="responsive_header_logo">
-       STEAM 
-     </div> 
-    </div> 
-   </div> 
-   <!--文本内容遮罩 --> 
-   <div class="responsive_page_content_overlay"> 
-   </div> 
-   <div class="responsive_page_content"> 
-       <div>
-         图拉丁图拉丁图拉丁图拉丁图拉丁图拉丁图拉丁图拉丁 
-        <br /> 图拉丁图拉丁图拉丁图拉丁图拉丁图拉丁图拉丁图拉丁 
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br /> 
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br /> 
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br /> 
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br /> 
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br /> 图拉丁 
-       </div> 
-    <!-- responsive_page_legacy_content --> 
-   </div> 
-   <!-- responsive_page_content --> 
-  </div> 
-  <!-- responsive_page_frame -->  
- </body>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
+    <title>Steam 客服</title>
+    <link rel="shortcut icon" href="img/home_01.svg"/>
+    <link href="css/shared_responsive.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="js/vue/vue.min.js"></script>
+    <script type="text/javascript" src="js/vue/axios.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript">$J = jQuery.noConflict();</script>
+    <script type="text/javascript" src="js/shared_responsive_adapter.js"></script>
+
+</head>
+<body class="v6 responsive_page">
+<div class="responsive_page_frame with_header main">
+    <div class="responsive_page_menu_ctn mainmenu">
+        <div class="responsive_page_menu" id="responsive_page_menu">
+            <div class="mainmenu_contents">
+                <div class="mainmenu_contents_items">
+                    <div style="text-align: center;">
+                        <a style="padding-top: 16px;" class="menuitem"> <img src="img/xhjb.jpg"/> </a>
+                    </div>
+                    <a class="menuitem supernav" data-tooltip-type="selector"
+                       data-tooltip-content=".submenu_store">神 话</a>
+
+                    <div class="submenu_store" style="display: none;"  data-submenuid="store" v-for="column in columns">
+                        <a class="submenuitem" @click="getData(column.id)">{{column.title}}</a>
+                    </div>
+
+                    <a class="menuitem supernav" style="display: block" href="https://steamcommunity.com/"
+                       data-tooltip-type="selector" data-tooltip-content=".submenu_community"> 社区 </a>
+                    <div class="submenu_community" style="display: none;" data-submenuid="community">
+                        <a class="submenuitem" href="https://steamcommunity.com/">主页</a>
+                        <a class="submenuitem" href="https://steamcommunity.com/">主页2</a>
+                        <a class="submenuitem" href="https://steamcommunity.com/">主页3</a>
+                    </div>
+                    <a class="menuitem" href="https://help.steampowered.com/zh-cn/"> 客服 </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="responsive_header">
+        <div class="responsive_header_content">
+            <div id="responsive_menu_logo">
+                <img src="img/menu.png" height="100%"/>
+            </div>
+            <div class="responsive_header_logo" style="font-weight: 700;color:white;">
+                {{title}}
+            </div>
+        </div>
+    </div>
+    <!--文本内容遮罩 -->
+    <div class="responsive_page_content_overlay">
+    </div>
+    <div class="responsive_page_content">
+        <div class="tale-content">
+            <!-- 主界面具体展示内容 -->
+            <p v-for="paragraph in paragraphs">{{paragraph}}</p>
+
+            <div v-if="type == '谚语' || type == '关于本书'">
+
+            </div>
+
+            <div style="text-align: center;" v-else>
+                <p>口述人：{{narrator}}　搜集人：{{recorder}}</p>
+            </div>
+
+            <br/>
+
+            <div class="feedbackDiv">
+                <button @click="showFeedback()" style="background-color: initial;padding: 3px 3px 0px 5px;border-width: 0px;">
+                    <!--穿透图片的点击事件-->
+                    <img src="img/edit.png" alt="反馈" style="pointer-events: none;width: 25px;" />
+                </button>
+            </div>
+        </div>
+        </div>
+        <!-- responsive_page_legacy_content -->
+    </div>
+    <!-- responsive_page_content -->
+</div>
+<!-- responsive_page_frame -->
+<script>
+    new Vue({
+        el: '.main',
+        data: {
+            type: '',
+            title: '',
+            paragraphs: [],
+            narrator: '',
+            recorder: '',
+            showContent: false,
+            columns: [id = '', title = ''],
+            columns2: [id = '', title = ''],
+            columns3: [id = '', title = ''],
+            columns4: [id = '', title = ''],
+            columns5: [id = '', title = ''],
+            columns6: [id = '', title = ''],
+            timer: '',
+            counter: 0,
+            fontSize: 18,
+        },
+        created: function () { //在模板渲染成html前调用，即通常初始化某些属性值，然后再渲染成视图。
+            this.getData(1);
+            this.getMyth('神话');
+            this.getMyth('传说');
+            this.getMyth('故事');
+            this.getMyth('歌谣');
+            this.getMyth('谚语');
+            this.getMyth('关于本书');
+            this.getCounter();
+        },
+        methods: {
+            getData: function (id) {
+                const that = this;
+
+                // 切换内容时，定位到最上面
+                //document.getElementsByClassName("tale-content")[0].style.transform = "translate3d(0px, 0px, 0px) translateZ(0px)";
+                // 初始化滑块位置
+                localFlag = true;
+
+                // 设置字体，用于从各乡镇入选作品切换到其他栏目时字体变小的问题
+                var fontSize = sessionStorage.getItem("fontSize");
+                if (fontSize != null) {
+                    document.getElementsByClassName("tale-content")[0].style.fontSize = fontSize + "px";
+                } else {
+                    // 将字体大小添加到缓存中
+                    sessionStorage.setItem("fontSize", "18");
+                }
+
+                // 先去浏览器缓存中取值
+                var paramsTemp = JSON.parse(sessionStorage.getItem(id));
+                if (paramsTemp != null) {
+                    that.type = paramsTemp.type;
+                    that.title = paramsTemp.title;
+                    that.paragraphs = paramsTemp.paragraphs;
+                    that.narrator = paramsTemp.narrator;
+                    that.recorder = paramsTemp.recorder;
+
+                    // 对于统计表，修改字体大小
+                    if ("各乡镇入选作品" == that.title) {
+                        document.getElementsByClassName("tale-content")[0].style.fontSize = "15px";
+                    }
+
+                    // 当网络较卡时，需要等数据都填充到模板之中才展示出来
+                    that.showContent = true;
+
+                    // 动态设置样式
+                    if (that.type == "歌谣") {
+                        document.getElementsByClassName("tale-content")[0].className = "mui-scroll tale-content ballad";
+                    } else {
+                        document.getElementsByClassName("tale-content")[0].className = "mui-scroll tale-content";
+                    }
+                } else {
+                    axios.get("/getTale/" + id)
+                        .then(function (response) {
+                            if (response.data) {
+                                var data = response.data;
+                                that.type = data.type;
+                                that.title = data.title;
+                                that.paragraphs = data.paragraphs;
+                                that.narrator = data.narrator;
+                                that.recorder = data.recorder;
+
+                                // 将故事内容缓存到浏览器中
+                                var params = {
+                                    type: that.type,
+                                    title: that.title,
+                                    paragraphs: that.paragraphs,
+                                    narrator: that.narrator,
+                                    recorder: that.recorder
+                                };
+                                sessionStorage.setItem(id, JSON.stringify(params));
+
+                                // 对于统计表，修改字体大小
+                                if ("各乡镇入选作品" == that.title) {
+                                    document.getElementsByClassName("tale-content")[0].style.fontSize = "15px";
+                                }
+
+                                // 当网络较卡时，需要等数据都填充到模板之中才展示出来
+                                that.showContent = true;
+
+                                // 动态设置样式
+                                if (that.type == "歌谣") {
+                                    document.getElementsByClassName("tale-content")[0].className = "mui-scroll tale-content ballad";
+                                } else {
+                                    document.getElementsByClassName("tale-content")[0].className = "mui-scroll tale-content";
+                                }
+                            } else {
+                                alert('访问错误,请检查网络');
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                }
+
+                // 设置背景色
+                var bgColor = sessionStorage.getItem("bgColor");
+                if (bgColor != null) {
+                    document.getElementsByClassName("tale-content")[0].style.backgroundColor = bgColor;
+                }
+
+            },
+            getMyth: function (type) {
+                const that = this;
+                axios.get("/getTalesByType/" + type)
+                    .then(function (response) {
+                        if (response.data) {
+                            if ("神话" == type) {
+                                that.columns = response.data;
+                            } else if ("传说" == type) {
+                                that.columns2 = response.data;
+                            } else if ("故事" == type) {
+                                that.columns3 = response.data;
+                            } else if ("歌谣" == type) {
+                                that.columns4 = response.data;
+                            } else if ("谚语" == type) {
+                                that.columns5 = response.data;
+                            } else if ("关于本书" == type) {
+                                that.columns6 = response.data;
+                            }
+                        } else {
+                            alert('访问错误,请检查网络');
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            getCounter: function () {
+                const that = this;
+                axios.get("/getCounter")
+                    .then(function (response) {
+                        if (response.status == 200) {
+                            that.counter = response.data;
+                        } else {
+                            alert('访问错误,请检查网络');
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            changeBg: function (color) {
+                document.getElementsByClassName("tale-content")[0].style.backgroundColor = color;
+                sessionStorage.setItem("bgColor", color);
+            },
+            changeFontSize: function (ops) {
+                const that = this;
+                var fontSize = sessionStorage.getItem("fontSize");
+                if (fontSize == null) {
+                    // 默认字体大小为18px;
+                    fontSize = "18";
+                }
+
+                if (ops == "-1") {
+                    if (fontSize > 1) {
+                        fontSize = parseInt(fontSize) - 1;
+                    }
+                } else {
+                    if (fontSize < 50) {
+                        fontSize = parseInt(fontSize) + 1;
+                    }
+                }
+                that.fontSize = fontSize;
+                document.getElementsByClassName("tale-content")[0].style.fontSize = fontSize + "px";
+                // 将字体大小添加到缓存中
+                sessionStorage.setItem("fontSize", fontSize);
+            },
+            showFeedback: function () {
+                const that = this;
+                var btnArray = ['提交', '取消'];
+                mui.prompt('', '示例：可以是错别字提醒，可以是样式建议，也可以是新的民间故事', '留言', btnArray, function (e) {
+                    if (e.index == 0) {
+                        // 失去焦点
+                        document.getElementsByTagName("textarea")[0].blur();
+                        var content = document.getElementsByTagName("textarea")[0].value;
+                        that.saveFeedback(content);
+                    }
+                })
+            },
+            saveFeedback: function (content) {
+                const that = this;
+                if (content != null && content != "") {
+                    if (content.length > 20000) {
+                        mui.alert("反馈内容过多，请删减！");
+                        return;
+                    }
+                    axios.post("/addFeedback", {
+                        type: that.type,
+                        title: that.title,
+                        content: content,
+                        useragent: window.navigator.userAgent
+                    })
+                        .then(function (response) {
+                            if (response.data) {
+                                mui.alert("提交成功");
+                            } else {
+                                mui.alert('访问错误,请检查网络');
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                } else {
+                    mui.alert("反馈内容为空！");
+                }
+            }
+        },
+        mounted: function () { //在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作。
+            this.timer = setInterval(this.getCounter, 8000);
+            // 设置背景色
+            var bgColor = sessionStorage.getItem("bgColor");
+            if (bgColor != null) {
+                document.getElementsByClassName("tale-content")[0].style.backgroundColor = bgColor;
+            }
+            // 设置字体
+            var fontSize = sessionStorage.getItem("fontSize");
+            if (fontSize != null) {
+                document.getElementsByClassName("tale-content")[0].style.fontSize = fontSize + "px";
+                this.fontSize = fontSize;
+            }
+        },
+        beforeDestroy: function () {
+            clearInterval(this.timer);
+        }
+    });
+</script>
+</body>
 </html>
