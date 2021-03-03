@@ -135,6 +135,12 @@ jQuery( function($) {
 		{
 			fnMakeExpandableMenuItem( $NotificationItem, $NotificationSubmenu );
 		}
+
+		// 将滚动条定位到上次浏览的位置
+		var taleId = localStorage.getItem("taleId");
+		if (taleId != null && document.getElementById(taleId) != null) {
+			document.getElementById(taleId).scrollIntoView({block: "center"});
+		}
 	};
 
 	var MainMenuEvents = null;
