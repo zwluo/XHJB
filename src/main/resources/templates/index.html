@@ -295,9 +295,9 @@
                 localStorage.setItem("taleId", id);
 
                 // 设置字体，用于从各乡镇入选作品切换到其他栏目时字体变小的问题
-                var fontSize = localStorage.getItem("fontSize");
-                if (fontSize != null) {
-                    document.getElementsByClassName("tale-content")[0].style.fontSize = fontSize + "px";
+                var fs = localStorage.getItem("fontSize");
+                if (fs != null) {
+                    document.getElementsByClassName("tale-content")[0].style.fontSize = fs + "px";
                 } else {
                     // 将字体大小添加到缓存中
                     localStorage.setItem("fontSize", "20");
@@ -314,7 +314,7 @@
 
                     // 对于统计表，修改字体大小
                     if ("各乡镇入选作品" == that.title) {
-                        document.getElementsByClassName("tale-content")[0].style.fontSize = "15px";
+                        document.getElementsByClassName("tale-content")[0].style.fontSize = "17px";
                     }
 
                     // 当网络较卡时，需要等数据都填充到模板之中才展示出来
@@ -349,7 +349,7 @@
 
                                 // 对于统计表，修改字体大小
                                 if ("各乡镇入选作品" == that.title) {
-                                    document.getElementsByClassName("tale-content")[0].style.fontSize = "15px";
+                                    document.getElementsByClassName("tale-content")[0].style.fontSize = "17px";
                                 }
 
                                 // 当网络较卡时，需要等数据都填充到模板之中才展示出来
@@ -491,10 +491,15 @@
                 document.getElementsByClassName("tale-content")[0].style.backgroundColor = bgColor;
             }
             // 设置字体
-            var fontSize = localStorage.getItem("fontSize");
-            if (fontSize != null) {
-                document.getElementsByClassName("tale-content")[0].style.fontSize = fontSize + "px";
-                this.fontSize = fontSize;
+            var fs = localStorage.getItem("fontSize");
+            if (fs != null) {
+                // 对于统计表，修改字体大小
+                if ("各乡镇入选作品" == this.title) {
+                    document.getElementsByClassName("tale-content")[0].style.fontSize = "17px";
+                } else {
+                    document.getElementsByClassName("tale-content")[0].style.fontSize = fs + "px";
+                }
+                this.fontSize = fs;
             }
         },
         beforeDestroy: function () {
