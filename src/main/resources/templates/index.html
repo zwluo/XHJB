@@ -128,37 +128,37 @@
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store">神 话</a>
                     <div class="submenu_store" style="display: none;"  data-submenuid="store">
-                        <a class="submenuitem" :name="column.id" @click="getData(column.id, $event)" v-for="column in columns">{{column.title}}</a>
+                        <a class="submenuitem" :id="column.id" @click="getData(column.id, $event)" v-for="column in columns">{{column.title}}</a>
                     </div>
 
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store2">传 说</a>
                     <div class="submenu_store2" style="display: none;"  data-submenuid="store2">
-                        <a class="submenuitem" :name="column.id" @click="getData(column.id, $event)" v-for="column in columns2">{{column.title}}</a>
+                        <a class="submenuitem" :id="column.id" @click="getData(column.id, $event)" v-for="column in columns2">{{column.title}}</a>
                     </div>
 
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store3">故 事</a>
                     <div class="submenu_store3" style="display: none;"  data-submenuid="store3">
-                        <a class="submenuitem" :name="column.id" @click="getData(column.id, $event)" v-for="column in columns3">{{column.title}}</a>
+                        <a class="submenuitem" :id="column.id" @click="getData(column.id, $event)" v-for="column in columns3">{{column.title}}</a>
                     </div>
 
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store4">歌 谣</a>
                     <div class="submenu_store4" style="display: none;"  data-submenuid="store4">
-                        <a class="submenuitem" :name="column.id" @click="getData(column.id, $event)" v-for="column in columns4">{{column.title}}</a>
+                        <a class="submenuitem" :id="column.id" @click="getData(column.id, $event)" v-for="column in columns4">{{column.title}}</a>
                     </div>
 
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store5">谚 语</a>
                     <div class="submenu_store5" style="display: none;"  data-submenuid="store5">
-                        <a class="submenuitem" :name="column.id" @click="getData(column.id, $event)" v-for="column in columns5">{{column.title}}</a>
+                        <a class="submenuitem" :id="column.id" @click="getData(column.id, $event)" v-for="column in columns5">{{column.title}}</a>
                     </div>
 
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store6">关于本书</a>
                     <div class="submenu_store6" style="display: none;"  data-submenuid="store6">
-                        <a class="submenuitem" :name="column.id" @click="getData(column.id, $event)" v-for="column in columns6">{{column.title}}</a>
+                        <a class="submenuitem" :id="column.id" @click="getData(column.id, $event)" v-for="column in columns6">{{column.title}}</a>
                     </div>
 
                     <a class="menuitem supernav" data-tooltip-type="selector"
@@ -244,24 +244,7 @@
             timer: '',
             counter: 0,
             fontSize: 20,
-        },
-        watch: {
-            columns6() {
-                this.$nextTick(function(){
-                    // 给之前选中的故事标题添加选中样式
-                    // 循环遍历所有的故事标题，直到找到对应的id
-                    var taleId = localStorage.getItem("taleId");;
-                    if (taleId != null) {
-                        var submenuitems = document.getElementsByClassName("submenuitem");
-                        for(item in submenuitems) {
-                            if (taleId == submenuitems[item].name) {
-                                submenuitems[item].className = "submenuitem active";
-                                return;
-                            }
-                        }
-                    }
-                })
-            }
+            timer2: '',
         },
         created: function () { //在模板渲染成html前调用，即通常初始化某些属性值，然后再渲染成视图。
             var taleId = localStorage.getItem("taleId");
@@ -480,10 +463,20 @@
                 } else {
                     alert("留言内容为空！");
                 }
+            },
+            findAndSetTitle: function () {
+                // 给之前选中的故事标题添加选中样式
+                // 循环遍历所有的故事标题，直到找到对应的id
+                var taleId = localStorage.getItem("taleId");
+                if (taleId != null && document.getElementById(taleId) != null) {
+                    document.getElementById(taleId).className = "submenuitem active";
+                    clearInterval(this.timer2);
+                }
             }
         },
         mounted: function () { //在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作。
             this.timer = setInterval(this.getCounter, 8000);
+            this.timer2 = setInterval(this.findAndSetTitle, 500);
             // 设置背景色
             var bgColor = localStorage.getItem("bgColor");
             if (bgColor != null) {
@@ -503,6 +496,7 @@
         },
         beforeDestroy: function () {
             clearInterval(this.timer);
+            clearInterval(this.timer2);
         }
     });
 </script>
