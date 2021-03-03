@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
-    <title>Steam 客服</title>
+    <title>兴化卷本</title>
     <link rel="shortcut icon" href="img/home_01.svg"/>
     <link href="css/shared_responsive.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="js/vue/vue.min.js"></script>
@@ -18,7 +18,7 @@
             background: #c8e8c8;
             padding: 10px 15px;
             border-radius: 15px;
-            font-size: 18px;
+            font-size: 20px;
             font-family: sans-serif;
             line-height: 1.8;
             /*每行字体平均分布*/
@@ -32,6 +32,80 @@
             margin-bottom: 0px;
         }
 
+        .bgDiv {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            /*垂直居中*/
+            align-items: center;
+            margin-top: 20px;
+            color: white;
+        }
+
+        .submenu_store7 {
+            padding-bottom: 15px;
+        }
+
+        .yellowBg {
+            background-color: #f6f4ec;
+        }
+
+        .greenBg {
+            background-color: #e6f0e6;
+        }
+
+        .blueBg {
+            background-color: #e3f5fa;
+        }
+
+        .orangeBg {
+            background-color: #f0e6db;
+        }
+
+        .pinkBg {
+            background-color: #f5e9ef;
+        }
+
+        .bgBt {
+            width: 15%;
+            height: 20px;
+        }
+
+        button {
+            color: white;
+            background: #242424;
+            border-radius: 10px;
+            line-height: 30px;
+            padding: 0 18px;
+            border-width: 0px;
+        }
+
+        .feedbackDiv {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .ballad {
+            text-align: center;
+            font-size: 16px;
+            padding: 10px 5px;
+        }
+
+        textarea {
+            height: 90px;
+            width: 100%;
+            font: inherit;
+            font-size: 18px;
+            resize: none;
+        }
+
+        .menuitem_submenu_wrapper.active {
+            height: auto!important;
+        }
+
+        .submenuitem.active {
+            background-color: #009688;
+        }
     </style>
 
 </head>
@@ -48,49 +122,57 @@
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store">神 话</a>
                     <div class="submenu_store" style="display: none;"  data-submenuid="store">
-                        <a class="submenuitem" @click="getData(column.id)" v-for="column in columns">{{column.title}}</a>
+                        <a class="submenuitem" :name="column.id" @click="getData(column.id, $event)" v-for="column in columns">{{column.title}}</a>
                     </div>
 
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store2">传 说</a>
                     <div class="submenu_store2" style="display: none;"  data-submenuid="store2">
-                        <a class="submenuitem" @click="getData(column.id)" v-for="column in columns2">{{column.title}}</a>
+                        <a class="submenuitem" :name="column.id" @click="getData(column.id, $event)" v-for="column in columns2">{{column.title}}</a>
                     </div>
 
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store3">故 事</a>
                     <div class="submenu_store3" style="display: none;"  data-submenuid="store3">
-                        <a class="submenuitem" @click="getData(column.id)" v-for="column in columns3">{{column.title}}</a>
+                        <a class="submenuitem" :name="column.id" @click="getData(column.id, $event)" v-for="column in columns3">{{column.title}}</a>
                     </div>
 
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store4">歌 谣</a>
                     <div class="submenu_store4" style="display: none;"  data-submenuid="store4">
-                        <a class="submenuitem" @click="getData(column.id)" v-for="column in columns4">{{column.title}}</a>
+                        <a class="submenuitem" :name="column.id" @click="getData(column.id, $event)" v-for="column in columns4">{{column.title}}</a>
                     </div>
 
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store5">谚 语</a>
                     <div class="submenu_store5" style="display: none;"  data-submenuid="store5">
-                        <a class="submenuitem" @click="getData(column.id)" v-for="column in columns5">{{column.title}}</a>
+                        <a class="submenuitem" :name="column.id" @click="getData(column.id, $event)" v-for="column in columns5">{{column.title}}</a>
                     </div>
 
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store6">关于本书</a>
                     <div class="submenu_store6" style="display: none;"  data-submenuid="store6">
-                        <a class="submenuitem" @click="getData(column.id)" v-for="column in columns6">{{column.title}}</a>
+                        <a class="submenuitem" :name="column.id" @click="getData(column.id, $event)" v-for="column in columns6">{{column.title}}</a>
                     </div>
 
-
-
-                    <a class="menuitem supernav" style="display: block" href="https://steamcommunity.com/"
-                       data-tooltip-type="selector" data-tooltip-content=".submenu_community"> 社区 </a>
-                    <div class="submenu_community" style="display: none;" data-submenuid="community">
-                        <a class="submenuitem" href="https://steamcommunity.com/">主页</a>
-                        <a class="submenuitem" href="https://steamcommunity.com/">主页2</a>
-                        <a class="submenuitem" href="https://steamcommunity.com/">主页3</a>
+                    <a class="menuitem supernav" data-tooltip-type="selector"
+                       data-tooltip-content=".submenu_store7">样式调整</a>
+                    <div class="submenu_store7" style="display: none;"  data-submenuid="store7">
+                        <div class="bgDiv">
+                            <button class="yellowBg bgBt" @click="changeBg('#f6f4ec')"></button>
+                            <button class="greenBg bgBt" @click="changeBg('#e6f0e6')"></button>
+                            <button class="blueBg bgBt" @click="changeBg('#e3f5fa')"></button>
+                            <button class="orangeBg bgBt" @click="changeBg('#f0e6db')"></button>
+                            <button class="pinkBg bgBt" @click="changeBg('#f5e9ef')"></button>
+                        </div>
+                        <div class="bgDiv">
+                            <button @click="changeFontSize('-1')">A-</button>
+                            <span>{{fontSize}}</span>
+                            <button @click="changeFontSize('1')">A+</button>
+                        </div>
                     </div>
-                    <a class="menuitem" href="https://help.steampowered.com/zh-cn/"> 客服 </a>
+
+                    <a class="menuitem">当前在线人数：{{counter}}</a>
                 </div>
             </div>
         </div>
@@ -109,7 +191,7 @@
     <div class="responsive_page_content_overlay">
     </div>
     <div class="responsive_page_content">
-        <div class="tale-content">
+        <div v-show="showContent" class="tale-content">
             <!-- 主界面具体展示内容 -->
             <p v-for="paragraph in paragraphs">{{paragraph}}</p>
 
@@ -121,13 +203,15 @@
                 <p>口述人：{{narrator}}　搜集人：{{recorder}}</p>
             </div>
 
-            <br/>
+            <div class="feedbackDiv" style="display: none;">
+                <textarea placeholder="示例：可以是错别字提醒，可以是样式建议，也可以是新的故事"></textarea>
+                <button @click="saveFeedback()">提交</button>
+            </div>
 
-            <div class="feedbackDiv">
-                <button @click="showFeedback()" style="background-color: initial;padding: 3px 3px 0px 5px;border-width: 0px;">
-                    <!--穿透图片的点击事件-->
-                    <img src="img/edit.png" alt="反馈" style="pointer-events: none;width: 25px;" />
-                </button>
+            <br/>
+            <div style="opacity:0.3;position: absolute;right: 15px;bottom: 10px;">
+                <!--穿透图片的点击事件-->
+                <img @click="showFeedback()" src="img/edit.png" alt="留言" style="width: 25px;" />
             </div>
         </div>
         </div>
@@ -154,10 +238,33 @@
             columns6: [id = '', title = ''],
             timer: '',
             counter: 0,
-            fontSize: 18,
+            fontSize: 20,
+        },
+        watch: {
+            columns6() {
+                this.$nextTick(function(){
+                    // 给之前选中的故事标题添加选中样式
+                    // 循环遍历所有的故事标题，直到找到对应的id
+                    var taleId = localStorage.getItem("taleId");;
+                    if (taleId != null) {
+                        var submenuitems = document.getElementsByClassName("submenuitem");
+                        for(item in submenuitems) {
+                            if (taleId == submenuitems[item].name) {
+                                submenuitems[item].className = "submenuitem active";
+                                return;
+                            }
+                        }
+                    }
+                })
+            }
         },
         created: function () { //在模板渲染成html前调用，即通常初始化某些属性值，然后再渲染成视图。
-            this.getData(1);
+            var taleId = localStorage.getItem("taleId");
+            if (taleId != null) {
+                this.getData(parseInt(taleId), null);
+            } else {
+                this.getData(1, null);
+            }
             this.getMyth('神话');
             this.getMyth('传说');
             this.getMyth('故事');
@@ -167,21 +274,33 @@
             this.getCounter();
         },
         methods: {
-            getData: function (id) {
+            getData: function (id, event) {
                 const that = this;
 
+                // 给选中的故事标题添加样式，并回复之前故事标题的样式
+                if (document.getElementsByClassName("submenuitem active")[0] != null) {
+                    document.getElementsByClassName("submenuitem active")[0].className = "submenuitem";
+                }
+                if (event != null) {
+                    event.currentTarget.className = "submenuitem active";
+                }
+
                 // 切换内容时，定位到最上面
-                //document.getElementsByClassName("tale-content")[0].style.transform = "translate3d(0px, 0px, 0px) translateZ(0px)";
-                // 初始化滑块位置
-                localFlag = true;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                // 隐藏留言框
+                document.getElementsByClassName("feedbackDiv")[0].style.display = "none";
+
+                // 更新故事id缓存
+                localStorage.setItem("taleId", id);
 
                 // 设置字体，用于从各乡镇入选作品切换到其他栏目时字体变小的问题
-                var fontSize = sessionStorage.getItem("fontSize");
+                var fontSize = localStorage.getItem("fontSize");
                 if (fontSize != null) {
                     document.getElementsByClassName("tale-content")[0].style.fontSize = fontSize + "px";
                 } else {
                     // 将字体大小添加到缓存中
-                    sessionStorage.setItem("fontSize", "18");
+                    localStorage.setItem("fontSize", "20");
                 }
 
                 // 先去浏览器缓存中取值
@@ -252,7 +371,7 @@
                 }
 
                 // 设置背景色
-                var bgColor = sessionStorage.getItem("bgColor");
+                var bgColor = localStorage.getItem("bgColor");
                 if (bgColor != null) {
                     document.getElementsByClassName("tale-content")[0].style.backgroundColor = bgColor;
                 }
@@ -300,14 +419,14 @@
             },
             changeBg: function (color) {
                 document.getElementsByClassName("tale-content")[0].style.backgroundColor = color;
-                sessionStorage.setItem("bgColor", color);
+                localStorage.setItem("bgColor", color);
             },
             changeFontSize: function (ops) {
                 const that = this;
-                var fontSize = sessionStorage.getItem("fontSize");
+                var fontSize = localStorage.getItem("fontSize");
                 if (fontSize == null) {
-                    // 默认字体大小为18px;
-                    fontSize = "18";
+                    // 默认字体大小为20px;
+                    fontSize = "20";
                 }
 
                 if (ops == "-1") {
@@ -322,25 +441,23 @@
                 that.fontSize = fontSize;
                 document.getElementsByClassName("tale-content")[0].style.fontSize = fontSize + "px";
                 // 将字体大小添加到缓存中
-                sessionStorage.setItem("fontSize", fontSize);
+                localStorage.setItem("fontSize", fontSize);
             },
             showFeedback: function () {
-                const that = this;
-                var btnArray = ['提交', '取消'];
-                mui.prompt('', '示例：可以是错别字提醒，可以是样式建议，也可以是新的民间故事', '留言', btnArray, function (e) {
-                    if (e.index == 0) {
-                        // 失去焦点
-                        document.getElementsByTagName("textarea")[0].blur();
-                        var content = document.getElementsByTagName("textarea")[0].value;
-                        that.saveFeedback(content);
-                    }
-                })
+                var display = document.getElementsByClassName("feedbackDiv")[0].style.display;
+                if ("none" == display) {
+                    document.getElementsByClassName("feedbackDiv")[0].style.display = "block";
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                } else {
+                    document.getElementsByClassName("feedbackDiv")[0].style.display = "none";
+                }
             },
-            saveFeedback: function (content) {
+            saveFeedback: function () {
                 const that = this;
+                var content = document.getElementsByTagName("textarea")[0].value;
                 if (content != null && content != "") {
                     if (content.length > 20000) {
-                        mui.alert("反馈内容过多，请删减！");
+                        alert("留言内容过多，请删减！");
                         return;
                     }
                     axios.post("/addFeedback", {
@@ -351,28 +468,30 @@
                     })
                         .then(function (response) {
                             if (response.data) {
-                                mui.alert("提交成功");
+                                alert("提交成功");
+                                document.getElementsByTagName("textarea")[0].value = "";
+                                that.showFeedback();
                             } else {
-                                mui.alert('访问错误,请检查网络');
+                                alert('访问错误,请检查网络');
                             }
                         })
                         .catch(function (error) {
                             console.log(error);
                         });
                 } else {
-                    mui.alert("反馈内容为空！");
+                    alert("留言内容为空！");
                 }
             }
         },
         mounted: function () { //在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作。
             this.timer = setInterval(this.getCounter, 8000);
             // 设置背景色
-            var bgColor = sessionStorage.getItem("bgColor");
+            var bgColor = localStorage.getItem("bgColor");
             if (bgColor != null) {
                 document.getElementsByClassName("tale-content")[0].style.backgroundColor = bgColor;
             }
             // 设置字体
-            var fontSize = sessionStorage.getItem("fontSize");
+            var fontSize = localStorage.getItem("fontSize");
             if (fontSize != null) {
                 document.getElementsByClassName("tale-content")[0].style.fontSize = fontSize + "px";
                 this.fontSize = fontSize;

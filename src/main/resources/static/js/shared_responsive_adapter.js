@@ -30,7 +30,7 @@ jQuery( function($) {
 
 	$J(document).on('click.OnClickDismissMenu', '.responsive_OnClickDismissMenu', fnResetMenuState );
 
-	var strLastExpandedSubmenu = sessionStorage.getItem( 'responsiveMenuLastSubmenu' );
+	var strLastExpandedSubmenu = localStorage.getItem( 'responsiveMenuLastSubmenu' );
 
 	var fnMakeExpandableMenuItem = function( $MenuItem, $Submenu )
 	{
@@ -61,7 +61,7 @@ jQuery( function($) {
 			{
 				$SubmenuWrapper.removeClass('active' ).css('height',0);
 				$MenuItem.removeClass('submenu_active');
-				sessionStorage.setItem('responsiveMenuLastSubmenu', null);
+				localStorage.setItem('responsiveMenuLastSubmenu', null);
 			}
 			else
 			{
@@ -70,7 +70,7 @@ jQuery( function($) {
 				$SubmenuWrapper.css( 'height', $Submenu.height() + 'px' );
 				$MenuItem.addClass( 'submenu_active' );
 				$SubmenuWrapper.addClass('active');
-				sessionStorage.setItem('responsiveMenuLastSubmenu', $Submenu.data('submenuid'));
+				localStorage.setItem('responsiveMenuLastSubmenu', $Submenu.data('submenuid'));
 			}
 		});
 	};
