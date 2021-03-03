@@ -35,7 +35,7 @@ html.responsive body {
     background: black;
 
     z-index: 30;
-    width: 230px;
+    width: 240px;
 }
 
 .responsive_page_frame:not(.in_menu_drag) .responsive_page_menu_ctn {
@@ -106,7 +106,7 @@ html.responsive body {
 .mainmenu_contents_items {
 
     font-family: "Motiva Sans", Sans-serif;
-    font-weight: 200; /* thin */
+    font-weight: 400;
 
 }
 
@@ -144,7 +144,7 @@ html.responsive body {
 
 .mainmenu_contents .menuitem {
     position: relative;
-    color: #bdbdbd;
+    color: #dadada;
     background: #171a21;
     transition: background 0.25s, color 0.25s;
 }
@@ -199,7 +199,7 @@ html.responsive body {
 
 .menuitem_submenu_wrapper .submenuitem, .notification_submenu .popup_menu_item {
     display: block;
-    font-size: 0.85em;
+    font-size: 0.9em;
     color: #ffffff;
     padding-left: 28px;
 }
