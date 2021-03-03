@@ -182,8 +182,7 @@ html.responsive body {
 }
 
 .mainmenu_contents .menuitem.submenu_active .chevron {
-    /*transform: rotate( 180deg );
-    -webkit-transform: rotate( 90deg );*/
+    -webkit-transform: rotate( 180deg );
     transform: rotate( 180deg );
 }
 
