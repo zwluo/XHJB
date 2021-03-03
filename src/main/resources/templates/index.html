@@ -107,6 +107,11 @@
         .submenuitem.active {
             background-color: #36a2bd;
         }
+
+        /*自定义vue标签，用于解决vue语法会有延迟加载显现{{xxx}}的问题*/
+        [v-cloak] {
+            display: none;
+        }
     </style>
 
 </head>
@@ -192,7 +197,7 @@
     <div class="responsive_page_content_overlay">
     </div>
     <div class="responsive_page_content">
-        <div v-show="showContent" class="tale-content">
+        <div v-cloak class="tale-content">
             <!-- 主界面具体展示内容 -->
             <p v-for="paragraph in paragraphs">{{paragraph}}</p>
 
@@ -230,7 +235,6 @@
             paragraphs: [],
             narrator: '',
             recorder: '',
-            showContent: false,
             columns: [id = '', title = ''],
             columns2: [id = '', title = ''],
             columns3: [id = '', title = ''],
@@ -318,9 +322,6 @@
                         document.getElementsByClassName("tale-content")[0].style.fontSize = "17px";
                     }
 
-                    // 当网络较卡时，需要等数据都填充到模板之中才展示出来
-                    that.showContent = true;
-
                     // 动态设置样式
                     if (that.type == "歌谣") {
                         document.getElementsByClassName("tale-content")[0].className = "mui-scroll tale-content ballad";
@@ -352,9 +353,6 @@
                                 if ("各乡镇入选作品" == that.title) {
                                     document.getElementsByClassName("tale-content")[0].style.fontSize = "17px";
                                 }
-
-                                // 当网络较卡时，需要等数据都填充到模板之中才展示出来
-                                that.showContent = true;
 
                                 // 动态设置样式
                                 if (that.type == "歌谣") {
