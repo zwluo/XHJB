@@ -188,7 +188,7 @@ html.responsive body {
 
 .menuitem_submenu_wrapper {
     overflow: hidden;
-    background: #171a21;
+    background: #282b33;
 
     transition: height 0.5s, background 0.25s, color 0.25s;
 }
@@ -313,7 +313,7 @@ html.responsive body {
 
 .responsive_header {
     display: none;
-    background: #171a21;
+    background: #393d49;
 
     position: fixed;
     top: 0;
@@ -321,7 +321,7 @@ html.responsive body {
     right: 0;
     text-align: center;
     z-index: 20;
-    box-shadow: 0 0 7px 0 rgba( 0, 0, 0, 0.75 );
+    box-shadow: 0 0 7px 0 rgba( 100, 100, 100, 0.75 );
 
     overflow: hidden;
 
