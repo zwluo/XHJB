@@ -38,7 +38,7 @@
             justify-content: space-around;
             /*垂直居中*/
             align-items: center;
-            margin-top: 20px;
+            padding-top: 20px;
             color: white;
         }
 
@@ -104,10 +104,6 @@
             padding: 8px 8px;
         }
 
-        .menuitem_submenu_wrapper.active {
-            height: auto!important;
-        }
-
         .submenuitem.active {
             background-color: #36a2bd;
         }
@@ -168,21 +164,21 @@
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store7">样式调整</a>
                     <div class="submenu_store7" style="display: none;"  data-submenuid="store7">
-                        <div class="bgDiv">
+                        <a class="bgDiv">
                             <button class="yellowBg bgBt" @click="changeBg('#f6f4ec')"></button>
                             <button class="greenBg bgBt" @click="changeBg('#e6f0e6')"></button>
                             <button class="blueBg bgBt" @click="changeBg('#e3f5fa')"></button>
                             <button class="orangeBg bgBt" @click="changeBg('#f0e6db')"></button>
                             <button class="pinkBg bgBt" @click="changeBg('#f5e9ef')"></button>
-                        </div>
-                        <div class="bgDiv">
+                        </a>
+                        <a class="bgDiv" style="padding-bottom: 20px;">
                             <button @click="changeFontSize('-1')">A-</button>
                             <span>{{fontSize}}</span>
                             <button @click="changeFontSize('1')">A+</button>
-                        </div>
+                        </a>
                     </div>
 
-                    <a class="menuitem">当前在线人数：{{counter}}</a>
+                    <a class="menuitem" style="border-bottom: 0px;">当前在线人数：{{counter}}</a>
                 </div>
             </div>
         </div>
