@@ -61,7 +61,7 @@ jQuery( function($) {
 			{
 				$SubmenuWrapper.removeClass('active' ).css('height',0);
 				$MenuItem.removeClass('submenu_active');
-				localStorage.setItem('responsiveMenuLastSubmenu', null);
+				//localStorage.setItem('responsiveMenuLastSubmenu', null);
 			}
 			else
 			{
@@ -79,7 +79,7 @@ jQuery( function($) {
 						$SubmenuWrapper.addClass('active');
 					}, 500);
 				}
-				localStorage.setItem('responsiveMenuLastSubmenu', $Submenu.data('submenuid'));
+				//localStorage.setItem('responsiveMenuLastSubmenu', $Submenu.data('submenuid'));
 			}
 		});
 	};
@@ -147,8 +147,10 @@ jQuery( function($) {
 
 		// 将滚动条定位到上次浏览的位置
 		var taleId = localStorage.getItem("taleId");
-		if (taleId != null && document.getElementsByName(taleId) != null) {
-			document.getElementsByName(taleId)[0].scrollIntoView({block: "center"});
+		if (taleId != null
+			&& localStorage.getItem('responsiveMenuLastSubmenu') != "null"
+			&& document.getElementById(taleId) != null) {
+			document.getElementById(taleId).scrollIntoView({block: "center"});
 		}
 	};
 
