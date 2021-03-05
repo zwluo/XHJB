@@ -246,13 +246,40 @@
             fontSize: 20,
             timer2: '',
         },
-        created: function () { //在模板渲染成html前调用，即通常初始化某些属性值，然后再渲染成视图。
-            var taleId = localStorage.getItem("taleId");
-            if (taleId != null) {
-                this.getData(parseInt(taleId), null);
-            } else {
-                this.getData(1, null);
+        watch: {    //监控字段值的变化
+            title: function(data) {
+                // 切换内容时，定位到最上面
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                // 隐藏留言框
+                document.getElementsByClassName("feedbackDiv")[0].style.display = "none";
+
+                // 设置字体，用于从各乡镇入选作品切换到其他栏目时字体变小的问题
+                var fs = localStorage.getItem("fontSize");
+                if (fs != null) {
+                    document.getElementsByClassName("tale-content")[0].style.fontSize = fs + "px";
+                } else {
+                    // 将字体大小添加到缓存中
+                    localStorage.setItem("fontSize", "20");
+                }
+
+                // 对于统计表，修改字体大小
+                if ("各乡镇入选作品" == data) {
+                    document.getElementsByClassName("tale-content")[0].style.fontSize = "17px";
+                }
+
+            },
+            type: function(data) {
+                // 动态设置样式
+                if ("歌谣" == data) {
+                    document.getElementsByClassName("tale-content")[0].className = "tale-content ballad";
+                } else {
+                    document.getElementsByClassName("tale-content")[0].className = "tale-content";
+                }
             }
+        },
+        created: function () { //在模板渲染成html前调用，即通常初始化某些属性值，然后再渲染成视图。
+            this.getData(localStorage.getItem("taleId") == null ? 1 : parseInt(localStorage.getItem("taleId")), null);
             this.getMyth('神话');
             this.getMyth('传说');
             this.getMyth('故事');
@@ -265,31 +292,16 @@
             getData: function (id, event) {
                 const that = this;
 
-                // 给选中的故事标题添加样式，并回复之前故事标题的样式
-                if (document.getElementsByClassName("submenuitem active")[0] != null) {
-                    document.getElementsByClassName("submenuitem active")[0].className = "submenuitem";
-                }
-                if (event != null) {
+                // 用户切换故事时，取消之前故事标题的选中样式，并给现在的故事标题添加选中样式
+                if (event != null && localStorage.getItem("taleId") != String(id)) {
+                    if (document.getElementsByClassName("submenuitem active")[0] != null) {
+                        document.getElementsByClassName("submenuitem active")[0].className = "submenuitem";
+                    }
                     event.currentTarget.className = "submenuitem active";
                 }
 
-                // 切换内容时，定位到最上面
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-
-                // 隐藏留言框
-                document.getElementsByClassName("feedbackDiv")[0].style.display = "none";
-
                 // 更新故事id缓存
                 localStorage.setItem("taleId", id);
-
-                // 设置字体，用于从各乡镇入选作品切换到其他栏目时字体变小的问题
-                var fs = localStorage.getItem("fontSize");
-                if (fs != null) {
-                    document.getElementsByClassName("tale-content")[0].style.fontSize = fs + "px";
-                } else {
-                    // 将字体大小添加到缓存中
-                    localStorage.setItem("fontSize", "20");
-                }
 
                 // 先去浏览器缓存中取值
                 var paramsTemp = JSON.parse(sessionStorage.getItem(id));
@@ -299,18 +311,6 @@
                     that.paragraphs = paramsTemp.paragraphs;
                     that.narrator = paramsTemp.narrator;
                     that.recorder = paramsTemp.recorder;
-
-                    // 对于统计表，修改字体大小
-                    if ("各乡镇入选作品" == that.title) {
-                        document.getElementsByClassName("tale-content")[0].style.fontSize = "17px";
-                    }
-
-                    // 动态设置样式
-                    if (that.type == "歌谣") {
-                        document.getElementsByClassName("tale-content")[0].className = "mui-scroll tale-content ballad";
-                    } else {
-                        document.getElementsByClassName("tale-content")[0].className = "mui-scroll tale-content";
-                    }
                 } else {
                     axios.get("/getTale/" + id)
                         .then(function (response) {
@@ -332,17 +332,6 @@
                                 };
                                 sessionStorage.setItem(id, JSON.stringify(params));
 
-                                // 对于统计表，修改字体大小
-                                if ("各乡镇入选作品" == that.title) {
-                                    document.getElementsByClassName("tale-content")[0].style.fontSize = "17px";
-                                }
-
-                                // 动态设置样式
-                                if (that.type == "歌谣") {
-                                    document.getElementsByClassName("tale-content")[0].className = "mui-scroll tale-content ballad";
-                                } else {
-                                    document.getElementsByClassName("tale-content")[0].className = "mui-scroll tale-content";
-                                }
                             } else {
                                 alert('访问错误,请检查网络');
                             }
@@ -350,12 +339,6 @@
                         .catch(function (error) {
                             console.log(error);
                         });
-                }
-
-                // 设置背景色
-                var bgColor = localStorage.getItem("bgColor");
-                if (bgColor != null) {
-                    document.getElementsByClassName("tale-content")[0].style.backgroundColor = bgColor;
                 }
 
             },
@@ -406,10 +389,6 @@
             changeFontSize: function (ops) {
                 const that = this;
                 var fontSize = localStorage.getItem("fontSize");
-                if (fontSize == null) {
-                    // 默认字体大小为20px;
-                    fontSize = "20";
-                }
 
                 if (ops == "-1") {
                     if (fontSize > 1) {
@@ -465,8 +444,7 @@
                 }
             },
             findAndSetTitle: function () {
-                // 给之前选中的故事标题添加选中样式
-                // 循环遍历所有的故事标题，直到找到对应的id
+                // 刷新页面后，给之前选中的故事标题添加选中样式
                 var taleId = localStorage.getItem("taleId");
                 if (taleId != null && document.getElementById(taleId) != null) {
                     document.getElementById(taleId).className = "submenuitem active";
@@ -482,6 +460,7 @@
             if (bgColor != null) {
                 document.getElementsByClassName("tale-content")[0].style.backgroundColor = bgColor;
             }
+
             // 设置字体
             var fs = localStorage.getItem("fontSize");
             if (fs != null) {
@@ -492,6 +471,8 @@
                     document.getElementsByClassName("tale-content")[0].style.fontSize = fs + "px";
                 }
                 this.fontSize = fs;
+            } else {
+                localStorage.setItem("fontSize", "20");
             }
         },
         beforeDestroy: function () {

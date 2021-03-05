@@ -65,11 +65,20 @@ jQuery( function($) {
 			}
 			else
 			{
-				$SubmenuWrapper.siblings( '.menuitem_submenu_wrapper.active' ).css('height',0 ).removeClass('active');
-				$MenuItem.siblings('.menuitem').removeClass('submenu_active');
-				$SubmenuWrapper.css( 'height', $Submenu.height() + 'px' );
-				$MenuItem.addClass( 'submenu_active' );
-				$SubmenuWrapper.addClass('active');
+				// 解决从传说栏目最后一篇文章，切换到下一个故事栏目时，没有展现故事栏目第一篇文章
+				if ($SubmenuWrapper.siblings( '.menuitem_submenu_wrapper.active' ).length == 0) {
+					$SubmenuWrapper.css( 'height', $Submenu.height() + 'px' );
+					$MenuItem.addClass( 'submenu_active' );
+					$SubmenuWrapper.addClass('active');
+				} else {
+					$SubmenuWrapper.siblings( '.menuitem_submenu_wrapper.active' ).css('height',0 ).removeClass('active');
+					$MenuItem.siblings('.menuitem').removeClass('submenu_active');
+					setTimeout(function() {
+						$SubmenuWrapper.css( 'height', $Submenu.height() + 'px' );
+						$MenuItem.addClass( 'submenu_active' );
+						$SubmenuWrapper.addClass('active');
+					}, 500);
+				}
 				localStorage.setItem('responsiveMenuLastSubmenu', $Submenu.data('submenuid'));
 			}
 		});
