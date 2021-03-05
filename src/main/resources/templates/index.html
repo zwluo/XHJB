@@ -128,37 +128,37 @@
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store">神 话</a>
                     <div class="submenu_store" style="display: none;"  data-submenuid="store">
-                        <a class="submenuitem" :id="column.id" @click="getData(column.id, $event)" v-for="column in columns">{{column.title}}</a>
+                        <a class="submenuitem" :name="column.id" @click="getData(column.id, $event)" v-for="column in columns">{{column.title}}</a>
                     </div>
 
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store2">传 说</a>
                     <div class="submenu_store2" style="display: none;"  data-submenuid="store2">
-                        <a class="submenuitem" :id="column.id" @click="getData(column.id, $event)" v-for="column in columns2">{{column.title}}</a>
+                        <a class="submenuitem" :name="column.id" @click="getData(column.id, $event)" v-for="column in columns2">{{column.title}}</a>
                     </div>
 
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store3">故 事</a>
                     <div class="submenu_store3" style="display: none;"  data-submenuid="store3">
-                        <a class="submenuitem" :id="column.id" @click="getData(column.id, $event)" v-for="column in columns3">{{column.title}}</a>
+                        <a class="submenuitem" :name="column.id" @click="getData(column.id, $event)" v-for="column in columns3">{{column.title}}</a>
                     </div>
 
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store4">歌 谣</a>
                     <div class="submenu_store4" style="display: none;"  data-submenuid="store4">
-                        <a class="submenuitem" :id="column.id" @click="getData(column.id, $event)" v-for="column in columns4">{{column.title}}</a>
+                        <a class="submenuitem" :name="column.id" @click="getData(column.id, $event)" v-for="column in columns4">{{column.title}}</a>
                     </div>
 
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store5">谚 语</a>
                     <div class="submenu_store5" style="display: none;"  data-submenuid="store5">
-                        <a class="submenuitem" :id="column.id" @click="getData(column.id, $event)" v-for="column in columns5">{{column.title}}</a>
+                        <a class="submenuitem" :name="column.id" @click="getData(column.id, $event)" v-for="column in columns5">{{column.title}}</a>
                     </div>
 
                     <a class="menuitem supernav" data-tooltip-type="selector"
                        data-tooltip-content=".submenu_store6">关于本书</a>
                     <div class="submenu_store6" style="display: none;"  data-submenuid="store6">
-                        <a class="submenuitem" :id="column.id" @click="getData(column.id, $event)" v-for="column in columns6">{{column.title}}</a>
+                        <a class="submenuitem" :name="column.id" @click="getData(column.id, $event)" v-for="column in columns6">{{column.title}}</a>
                     </div>
 
                     <a class="menuitem supernav" data-tooltip-type="selector"
@@ -446,8 +446,8 @@
             findAndSetTitle: function () {
                 // 刷新页面后，给之前选中的故事标题添加选中样式
                 var taleId = localStorage.getItem("taleId");
-                if (taleId != null && document.getElementById(taleId) != null) {
-                    document.getElementById(taleId).className = "submenuitem active";
+                if (taleId != null && document.getElementsByName(taleId) != null) {
+                    document.getElementsByName(taleId)[0].className = "submenuitem active";
                     clearInterval(this.timer2);
                 }
             }
