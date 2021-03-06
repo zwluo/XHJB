@@ -31,6 +31,10 @@ jQuery( function($) {
 	$J(document).on('click.OnClickDismissMenu', '.responsive_OnClickDismissMenu', fnResetMenuState );
 
 	var strLastExpandedSubmenu = localStorage.getItem( 'responsiveMenuLastSubmenu' );
+	// 第一次访问时，默认打开神话栏目的第一篇文章
+	if (strLastExpandedSubmenu == null) {
+		strLastExpandedSubmenu = "神话";
+	}
 
 	var fnMakeExpandableMenuItem = function( $MenuItem, $Submenu )
 	{
