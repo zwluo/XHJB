@@ -178,7 +178,7 @@
                         </a>
                     </div>
 
-                    <a class="menuitem" style="border-bottom: 0px;">当前在线人数：{{counter}}</a>
+                    <a class="menuitem" style="border-bottom: 0px;" @click="redirectToChatRoom()">当前在线人数：{{counter}}</a>
                 </div>
             </div>
         </div>
@@ -451,6 +451,9 @@
                     document.getElementById(taleId).className = "submenuitem active";
                     clearInterval(this.timer2);
                 }
+            },
+            redirectToChatRoom: function () {
+                window.location.href = "http://" + window.location.host + "/chatroom.html";
             }
         },
         mounted: function () { //在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作。

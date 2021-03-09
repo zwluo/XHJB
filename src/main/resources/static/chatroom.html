@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
-    <title>HanppyRoom</title>
+    <title>兴化市卷本</title>
     <style>
         html {
             height: 100%;
@@ -35,24 +35,26 @@
         }
 
         .chat-main {
-            padding: 15px 15px 5px;
             overflow-x: hidden;
             overflow-y: auto;
             background-color: #eaedf4;
             position: absolute;
             top: 50px;
-            bottom: 50px;
+            bottom: 60px;
+            width: 100%;
         }
 
         .chat-mine {
             text-align: right;
-            padding-left: 0;
+            padding-right: 0px!important;
+            padding-left: 40px;
         }
         .chat-main ul li {
             position: relative;
             font-size: 0;
             margin-bottom: 10px;
             min-height: 68px;
+            padding-right: 40px;
         }
 
 
@@ -68,13 +70,13 @@
         .chat-text, .chat-user {
             display: inline-block;
             vertical-align: top;
-            font-size: 14px;
+            font-size: 18px;
         }
 
         .chat-mine .chat-text {
             margin-left: 0;
             text-align: left;
-            background-color: #5FB878;
+            background-color: #36a2bd;
             color: #fff;
         }
 
@@ -96,141 +98,62 @@
             position: absolute;
             bottom: 0px;
             width: 100%;
-            height: 40px;
+            /*height: 50px;*/
+            padding-bottom: 15px;
+
+            /*元素的padding值设定会使元素的整体扩大*/
+            /*box-sizing: border-box;*/
 
         }
 
         .chat-footer textarea {
             width: 70%;
             padding: 5px;
-            line-height: 20px;
+            line-height: 25px;
             border: none;
             overflow: auto;
             resize:none;
             overflow-y:hidden;
             vertical-align: middle;
             outline: none;
-            font-size: 15px;
+            font-size: 18px;
+            font-family: sans-serif;
         }
 
         .chat-footer button {
-            font-size: 14px;
+            font-size: 18px;
             height: 32px;
             margin-left: 5px;
-            padding: 0 20px;
-            background-color: #5FB878;
+            padding: 0 15px;
+            background-color: #36a2bd;
             color: #fff;
             border-radius: 3px;
             border-width: 0;
+            outline: none;
         }
 
 
 
         ul {
-            padding-left: 0px;
+            padding: 15px 15px 5px;
             margin-bottom: 0px;
         }
 
+        #responsive_menu_logo {
+            position: absolute;
+            top: 9px;
+            cursor: pointer;
+            width: 36px;
+            height: 31px;
+            left: 10px;
+        }
+        i {
+            font-style: normal;
+        }
+
     </style>
-    <script>
-        var url = "ws://" + window.location.host + "/page_room/";
-        //var url = "ws://127.0.0.1:8080/page_room/";
-        var ws = null;
-        //加入聊天室
-        function joinRoom() {
-            if (ws) {
-                alert("你已经在聊天室，不能再加入");
-                return;
-            }
-            var username = document.getElementById("user").value;
-            ws = new WebSocket(url + username);
-            //var ws = new WebSocket("wss://echo.websocket.org");
-            //ws = new WebSocket("ws://localhost:8080/test/one");
-            //与服务端建立连接触发
-            ws.onopen = function () {
-                console.log("与服务器成功建立连接")
-            };
-            //服务端推送消息触发
-            ws.onmessage = function (ev) {
-                talking(ev.data);
-            };
-
-            //发生错误触发
-            ws.onerror = function () {
-                console.log("连接错误")
-            };
-            //正常关闭触发
-            ws.onclose = function () {
-                console.log("连接关闭");
-                ws = null;
-            };
-        }
-
-        //退出聊天室
-        function exitRoom() {
-            closeWebSocket();
-        }
-
-        function sendMsg() {
-            if(!ws){
-                alert("你已掉线，请重新加入");
-                return;
-            }
-            //消息发送
-            ws.send(document.getElementById("sendMsg").value);
-            document.getElementById("sendMsg").value = "";
-        }
-
-        function closeWebSocket() {
-            if(ws){
-                ws.close();
-                ws = null;
-            }
-        }
-
-        function talking(content) {
-            const textarea = document.getElementById('content');
-            textarea.append(content + "\r\n");
-            // 自动滚动到文本框最下面
-            textarea.scrollTop = textarea.scrollHeight;
-        }
-
-
-
-        //工具方法,自适应textarea
-        // 最小高度
-        var minRows = 1;
-        // 最大高度，超过则出现滚动条
-        var maxRows = 4;
-        function autoResize(t) {
-            if (t.scrollTop == 0) t.scrollTop = 1;
-            while (t.scrollTop == 0) {
-                if (t.rows > minRows)
-                    t.rows--;
-                else
-                    break;
-                t.scrollTop = 1;
-                if (t.rows < maxRows)
-                    t.style.overflowY = "hidden";
-                if (t.scrollTop > 0) {
-                    t.rows++;
-                    break;
-                }
-            }
-            while (t.scrollTop > 0) {
-                if (t.rows < maxRows) {
-                    t.rows++;
-                    if (t.scrollTop == 0) t.scrollTop = 1;
-                }
-                else {
-                    t.style.overflowY = "auto";
-                    break;
-                }
-            }
-        }
-    </script>
 </head>
-<body>
+<body onload="joinRoom()">
 <!--<div style="text-align: center;background-color: rgba(129,86,255,0.35);margin:0 auto;border:1px solid #000;width:100%;height:100%">
     <br>欢迎使用<strong>陈本布衣</strong>牌极简聊天室：<br/><br/>
     <textarea id="content" cols="60"  readonly="readonly"></textarea><br>
@@ -242,82 +165,164 @@
     <button onclick="exitRoom()">退出群聊</button>
 </div>-->
 
-<div class="layui-layer">
-    <div class="layui-layer-title">
-        聊天室
+    <div class="layui-layer">
+
+        <div id="responsive_menu_logo" onclick="redirectToTale()">
+            <img src="img/undo.png" height="100%">
+        </div>
+
+        <div class="layui-layer-title">
+            聊天室
+        </div>
+
+        <div class="chat-main">
+            <ul id="content">
+
+
+
+            </ul>
+        </div>
+
+        <div class="chat-footer">
+            <textarea id="sendMsg" rows="1" onkeyup="autoResize(this)"></textarea>
+            <button type="button" onclick="sendMsg()">发送</button>
+        </div>
+
     </div>
 
+<script>
+    var url = "ws://" + window.location.host + "/page_room/";
+    var ws = null;
 
-                <div class="chat-main">
-                    <ul>
-                        <li class="chat-mine">
-                            <div class="chat-user">
-                                <cite><i>2021-03-09 13:57:53</i>测试名称</cite>
-                            </div>
-                            <div class="chat-text">
-                                离开家了就
-                            </div>
-                        </li>
+    var username = localStorage.getItem("username");
 
-                        <li>
-                            <div class="chat-user">
-                                <cite>测试1<i>2021-03-09 13:57:54</i></cite>
-                            </div>
-                            <div class="chat-text">
-                                你要和我说话？你真的要和我说话？你确定自己想说吗？你一定非说不可吗？那你说吧，这是自动回复。
-                            </div>
-                        </li>
+    //加入聊天室
+    function joinRoom() {
+        if (ws) {
+            alert("你已经在聊天室，不能再加入");
+            return;
+        }
 
-                        <li>
-                            <div class="chat-user">
-                                <cite>测试1<i>2021-03-09 13:57:54</i></cite>
-                            </div>
-                            <div class="chat-text">
-                                你要和我说话？你真的要和我说话？你确定自己想说吗？你一定非说不可吗？那你说吧，这是自动回复。
-                            </div>
-                        </li>
+        if (username == null) {
+            username = Math.floor(Math.random()*10);    // 可均衡获取 0 到 9 的随机整数。
+            localStorage.setItem("username", username);
+        }
 
-                        <li>
-                            <div class="chat-user">
-                                <cite>测试1<i>2021-03-09 13:57:54</i></cite>
-                            </div>
-                            <div class="chat-text">
-                                你要和我说话？你真的要和我说话？你确定自己想说吗？你一定非说不可吗？那你说吧，这是自动回复。
-                            </div>
-                        </li>
+        ws = new WebSocket(url + username);
+        //var ws = new WebSocket("wss://echo.websocket.org");
+        //ws = new WebSocket("ws://localhost:8080/test/one");
+        //与服务端建立连接触发
+        ws.onopen = function () {
+            console.log("与服务器成功建立连接")
+        };
+        //服务端推送消息触发
+        ws.onmessage = function (ev) {
+            talking(ev.data);
+        };
 
-                        <li>
-                            <div class="chat-user">
-                                <cite>测试1<i>2021-03-09 13:57:54</i></cite>
-                            </div>
-                            <div class="chat-text">
-                                你要和我说话？你真的要和我说话？你确定自己想说吗？你一定非说不可吗？那你说吧，这是自动回复。
-                            </div>
-                        </li>
+        //发生错误触发
+        ws.onerror = function () {
+            console.log("连接错误")
+        };
+        //正常关闭触发
+        ws.onclose = function () {
+            console.log("连接关闭");
+            ws = null;
+        };
 
-                        <li>
-                            <div class="chat-user">
-                                <cite>测试1<i>2021-03-09 13:57:54</i></cite>
-                            </div>
-                            <div class="chat-text">
-                                你要和我说话？你真的要和我说话？你确定自己想说吗？你一定非说不可吗？那你说吧，这是自动回复。
-                            </div>
-                        </li>
+        // 自动滚动到文本框最下面
+        document.getElementById('content').lastElementChild.scrollIntoView({behavior:"smooth"});
+    }
 
-                        <li>
-                            <div class="chat-user">
-                                <cite>测试1<i>2021-03-09 13:57:54</i></cite>
-                            </div>
-                            <div class="chat-text">
-                                你要和我说话？你真的要和我说话？你确定自己想说吗？你一定非说不可吗？那你说吧，这是自动回复。
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="chat-footer">
-                            <textarea rows="1" onkeyup="autoResize(this)"></textarea>
-                            <button type="button" onclick="sendMsg()">发送</button>
-                </div>
-</div>
+    //退出聊天室
+    function exitRoom() {
+        closeWebSocket();
+    }
+
+    function sendMsg() {
+        if(!ws){
+            alert("你已掉线，请重新加入");
+            return;
+        }
+        //消息发送
+        ws.send(document.getElementById("sendMsg").value);
+        document.getElementById("sendMsg").value = "";
+        document.getElementById("sendMsg").rows = 1;
+    }
+
+    function closeWebSocket() {
+        if(ws){
+            ws.close();
+            ws = null;
+        }
+    }
+
+    function talking(content) {
+        const textarea = document.getElementById('content');
+
+        var date = new Date();
+        if (username == content.split(":")[0]) {
+            textarea.innerHTML = textarea.innerHTML +
+                "<li class=\"chat-mine\"><div class=\"chat-user\"><i>" +
+                (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() +
+                "</i>【" +
+                content.split(":")[0]+
+                "】</div><div class=\"chat-text\">\n" +
+                content.split(":")[1] +
+                "</div></li>";
+        } else {
+            textarea.innerHTML = textarea.innerHTML +
+                "<li><div class=\"chat-user\">【" +
+                content.split(":")[0]+
+                "】<i>" +
+                (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() +
+                "</i></div><div class=\"chat-text\">\n" +
+                content.split(":")[1] +
+            "                    </div>\n" +
+            "                </li>";
+        }
+
+        // 自动滚动到文本框最下面
+        textarea.lastElementChild.scrollIntoView({behavior:"smooth"});
+    }
+
+
+
+    //工具方法,自适应textarea
+    // 最小高度
+    var minRows = 1;
+    // 最大高度，超过则出现滚动条
+    var maxRows = 4;
+    function autoResize(t) {
+        if (t.scrollTop == 0) t.scrollTop = 1;
+        while (t.scrollTop == 0) {
+            if (t.rows > minRows)
+                t.rows--;
+            else
+                break;
+            t.scrollTop = 1;
+            if (t.rows < maxRows)
+                t.style.overflowY = "hidden";
+            if (t.scrollTop > 0) {
+                t.rows++;
+                break;
+            }
+        }
+        while (t.scrollTop > 0) {
+            if (t.rows < maxRows) {
+                t.rows++;
+                if (t.scrollTop == 0) t.scrollTop = 1;
+            }
+            else {
+                t.style.overflowY = "auto";
+                break;
+            }
+        }
+    }
+
+    function redirectToTale() {
+        window.location.href = "http://" + window.location.host + "/index.html";
+    }
+</script>
 </body>
 </html>
