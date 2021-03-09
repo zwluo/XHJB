@@ -30,7 +30,7 @@ public class WsByTomcat {
     @OnOpen
     public void OnOpen(Session session, @PathParam("username") String username) throws IOException {
         sessions.add(session);
-        sendTextMsg("好友 [" + username + "] 加入群聊");
+        sendTextMsg("好友【" + username + "】加入群聊");
     }
 
     /**
@@ -41,7 +41,7 @@ public class WsByTomcat {
      */
     @OnMessage
     public void OnMsg(String msg, @PathParam("username") String username) throws IOException {
-        sendTextMsg(username + "：\r\n" + msg);
+        sendTextMsg("【" + username + "】：" + msg);
     }
 
 
@@ -51,7 +51,7 @@ public class WsByTomcat {
     @OnClose
     public void OnClose(Session session, @PathParam("username") String username) throws IOException {
         sessions.remove(session);
-        sendTextMsg("好友 ["+username + "] 退出群聊");
+        sendTextMsg("好友【"+username + "】退出群聊");
     }
 
     /**

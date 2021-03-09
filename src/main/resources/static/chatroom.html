@@ -1,8 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
     <title>HanppyRoom</title>
+    <style>
+        html {
+            height: 100%;
+        }
+
+        html body {
+            height: 100%;
+            margin: 0;
+        }
+
+
+        .layui-layer {
+            padding: 0;
+            background-color: #F6F6F6;
+            color: #333;
+            background-image: url(/layim/pro/dist/assets/skin/3.jpg);
+            height: 100%;
+        }
+
+        .layui-layer-title {
+            text-align: center;
+            height: 50px;
+            line-height: 50px;
+            background-color: #393d49;
+
+            font-weight: 700;
+            color: white;
+            font-size: 18px;
+        }
+
+        .chat-main {
+            padding: 15px 15px 5px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            background-color: #eaedf4;
+            position: absolute;
+            top: 50px;
+            bottom: 50px;
+        }
+
+        .chat-mine {
+            text-align: right;
+            padding-left: 0;
+        }
+        .chat-main ul li {
+            position: relative;
+            font-size: 0;
+            margin-bottom: 10px;
+            min-height: 68px;
+        }
+
+
+        .chat-mine .chat-user {
+            left: auto;
+            right: 3px;
+        }
+
+        .chat-user {
+            position: absolute;
+            left: 3px;
+        }
+        .chat-text, .chat-user {
+            display: inline-block;
+            vertical-align: top;
+            font-size: 14px;
+        }
+
+        .chat-mine .chat-text {
+            margin-left: 0;
+            text-align: left;
+            background-color: #5FB878;
+            color: #fff;
+        }
+
+        .chat-text {
+            position: relative;
+            line-height: 22px;
+            margin-top: 25px;
+            padding: 8px 15px;
+            background-color: #e2e2e2;
+            border-radius: 3px;
+            color: #333;
+            word-break: break-all;
+            max-width: 462px\9;
+        }
+        .chat-footer {
+            background-color: #eaedf4;
+            padding-top: 10px;
+            text-align: center;
+            position: absolute;
+            bottom: 0px;
+            width: 100%;
+            height: 40px;
+
+        }
+
+        .chat-footer textarea {
+            width: 70%;
+            padding: 5px;
+            line-height: 20px;
+            border: none;
+            overflow: auto;
+            resize:none;
+            overflow-y:hidden;
+            vertical-align: middle;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .chat-footer button {
+            font-size: 14px;
+            height: 32px;
+            margin-left: 5px;
+            padding: 0 20px;
+            background-color: #5FB878;
+            color: #fff;
+            border-radius: 3px;
+            border-width: 0;
+        }
+
+
+
+        ul {
+            padding-left: 0px;
+            margin-bottom: 0px;
+        }
+
+    </style>
     <script>
         var url = "ws://" + window.location.host + "/page_room/";
         //var url = "ws://127.0.0.1:8080/page_room/";
@@ -50,8 +179,6 @@
             //消息发送
             ws.send(document.getElementById("sendMsg").value);
             document.getElementById("sendMsg").value = "";
-
-
         }
 
         function closeWebSocket() {
@@ -62,20 +189,135 @@
         }
 
         function talking(content) {
-            document.getElementById("content").append(content + "\r\n");
+            const textarea = document.getElementById('content');
+            textarea.append(content + "\r\n");
+            // 自动滚动到文本框最下面
+            textarea.scrollTop = textarea.scrollHeight;
+        }
+
+
+
+        //工具方法,自适应textarea
+        // 最小高度
+        var minRows = 1;
+        // 最大高度，超过则出现滚动条
+        var maxRows = 4;
+        function autoResize(t) {
+            if (t.scrollTop == 0) t.scrollTop = 1;
+            while (t.scrollTop == 0) {
+                if (t.rows > minRows)
+                    t.rows--;
+                else
+                    break;
+                t.scrollTop = 1;
+                if (t.rows < maxRows)
+                    t.style.overflowY = "hidden";
+                if (t.scrollTop > 0) {
+                    t.rows++;
+                    break;
+                }
+            }
+            while (t.scrollTop > 0) {
+                if (t.rows < maxRows) {
+                    t.rows++;
+                    if (t.scrollTop == 0) t.scrollTop = 1;
+                }
+                else {
+                    t.style.overflowY = "auto";
+                    break;
+                }
+            }
         }
     </script>
 </head>
 <body>
-<div style="text-align: center;background-color: rgba(129,86,255,0.35);margin:0 auto;border:1px solid #000;width:600px;height:650px">
+<!--<div style="text-align: center;background-color: rgba(129,86,255,0.35);margin:0 auto;border:1px solid #000;width:100%;height:100%">
     <br>欢迎使用<strong>陈本布衣</strong>牌极简聊天室：<br/><br/>
-    <textarea id="content" cols="60" rows="30" readonly="readonly"></textarea><br>
+    <textarea id="content" cols="60"  readonly="readonly"></textarea><br>
     <input type="text" id="sendMsg">
     <button type="button" onclick="sendMsg()">发送消息</button>
     <br/><br/>
     用户：<input type="text" id="user">
     <button onclick="joinRoom()">加入群聊</button>
     <button onclick="exitRoom()">退出群聊</button>
+</div>-->
+
+<div class="layui-layer">
+    <div class="layui-layer-title">
+        聊天室
+    </div>
+
+
+                <div class="chat-main">
+                    <ul>
+                        <li class="chat-mine">
+                            <div class="chat-user">
+                                <cite><i>2021-03-09 13:57:53</i>测试名称</cite>
+                            </div>
+                            <div class="chat-text">
+                                离开家了就
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="chat-user">
+                                <cite>测试1<i>2021-03-09 13:57:54</i></cite>
+                            </div>
+                            <div class="chat-text">
+                                你要和我说话？你真的要和我说话？你确定自己想说吗？你一定非说不可吗？那你说吧，这是自动回复。
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="chat-user">
+                                <cite>测试1<i>2021-03-09 13:57:54</i></cite>
+                            </div>
+                            <div class="chat-text">
+                                你要和我说话？你真的要和我说话？你确定自己想说吗？你一定非说不可吗？那你说吧，这是自动回复。
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="chat-user">
+                                <cite>测试1<i>2021-03-09 13:57:54</i></cite>
+                            </div>
+                            <div class="chat-text">
+                                你要和我说话？你真的要和我说话？你确定自己想说吗？你一定非说不可吗？那你说吧，这是自动回复。
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="chat-user">
+                                <cite>测试1<i>2021-03-09 13:57:54</i></cite>
+                            </div>
+                            <div class="chat-text">
+                                你要和我说话？你真的要和我说话？你确定自己想说吗？你一定非说不可吗？那你说吧，这是自动回复。
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="chat-user">
+                                <cite>测试1<i>2021-03-09 13:57:54</i></cite>
+                            </div>
+                            <div class="chat-text">
+                                你要和我说话？你真的要和我说话？你确定自己想说吗？你一定非说不可吗？那你说吧，这是自动回复。
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="chat-user">
+                                <cite>测试1<i>2021-03-09 13:57:54</i></cite>
+                            </div>
+                            <div class="chat-text">
+                                你要和我说话？你真的要和我说话？你确定自己想说吗？你一定非说不可吗？那你说吧，这是自动回复。
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="chat-footer">
+                            <textarea rows="1" onkeyup="autoResize(this)"></textarea>
+                            <button type="button" onclick="sendMsg()">发送</button>
+                </div>
 </div>
 </body>
 </html>
