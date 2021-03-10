@@ -15,15 +15,14 @@
         }
 
 
-        .layui-layer {
+        .layer {
             padding: 0;
             background-color: #F6F6F6;
             color: #333;
-            background-image: url(/layim/pro/dist/assets/skin/3.jpg);
             height: 100%;
         }
 
-        .layui-layer-title {
+        .layer-title {
             text-align: center;
             height: 50px;
             line-height: 50px;
@@ -154,24 +153,13 @@
     </style>
 </head>
 <body onload="joinRoom()">
-<!--<div style="text-align: center;background-color: rgba(129,86,255,0.35);margin:0 auto;border:1px solid #000;width:100%;height:100%">
-    <br>欢迎使用<strong>陈本布衣</strong>牌极简聊天室：<br/><br/>
-    <textarea id="content" cols="60"  readonly="readonly"></textarea><br>
-    <input type="text" id="sendMsg">
-    <button type="button" onclick="sendMsg()">发送消息</button>
-    <br/><br/>
-    用户：<input type="text" id="user">
-    <button onclick="joinRoom()">加入群聊</button>
-    <button onclick="exitRoom()">退出群聊</button>
-</div>-->
-
-    <div class="layui-layer">
+    <div class="layer">
 
         <div id="responsive_menu_logo" onclick="redirectToTale()">
             <img src="img/undo.png" height="100%">
         </div>
 
-        <div class="layui-layer-title">
+        <div class="layer-title">
             聊天室
         </div>
 
@@ -204,7 +192,7 @@
         }
 
         if (username == null) {
-            username = Math.floor(Math.random()*10);    // 可均衡获取 0 到 9 的随机整数。
+            username = Math.floor(Math.random() * 1000) + 1;//uuid();    // 可均衡获取 0 到 9 的随机整数。
             localStorage.setItem("username", username);
         }
 
@@ -231,7 +219,9 @@
         };
 
         // 自动滚动到文本框最下面
-        document.getElementById('content').lastElementChild.scrollIntoView({behavior:"smooth"});
+        if(document.getElementById('content').childElementCount > 0) {
+            document.getElementById('content').lastElementChild.scrollIntoView({behavior:"smooth"});
+        }
     }
 
     //退出聊天室
@@ -322,6 +312,33 @@
 
     function redirectToTale() {
         window.location.href = "http://" + window.location.host + "/index.html";
+    }
+
+    /**
+     * 生成随机数，用于标识用户
+     * @returns {string}
+     */
+    function uuid() {
+        var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+        var uuid = [], i;
+
+        // rfc4122, version 4 form
+        var r;
+
+        // rfc4122 requires these characters
+        uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+        uuid[14] = '4';
+
+        // Fill in random data.  At i==19 set the high bits of clock sequence as
+        // per rfc4122, sec. 4.1.5
+        for (i = 0; i < 36; i++) {
+            if (!uuid[i]) {
+                r = 0 | Math.random() * 16;
+                uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+            }
+        }
+
+        return uuid.join('');
     }
 </script>
 </body>
