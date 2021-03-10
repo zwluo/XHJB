@@ -84,7 +84,7 @@
             line-height: 22px;
             margin-top: 25px;
             padding: 8px 15px;
-            background-color: #e2e2e2;
+            background-color: #ffffff;
             border-radius: 3px;
             color: #333;
             word-break: break-all;
@@ -148,6 +148,7 @@
         }
         i {
             font-style: normal;
+            font-size: 15px;
         }
 
     </style>
@@ -184,6 +185,9 @@
 
     var username = localStorage.getItem("username");
 
+    var scrollTop = 0;
+    var maxScrollTop = 0;
+
     //加入聊天室
     function joinRoom() {
         if (ws) {
@@ -192,7 +196,7 @@
         }
 
         if (username == null) {
-            username = Math.floor(Math.random() * 1000) + 1;//uuid();    // 可均衡获取 0 到 9 的随机整数。
+            username = Math.floor(Math.random() * 10000) + 1;//uuid();    // 可均衡获取 0 到 9 的随机整数。
             localStorage.setItem("username", username);
         }
 
@@ -217,11 +221,6 @@
             console.log("连接关闭");
             ws = null;
         };
-
-        // 自动滚动到文本框最下面
-        if(document.getElementById('content').childElementCount > 0) {
-            document.getElementById('content').lastElementChild.scrollIntoView({behavior:"smooth"});
-        }
     }
 
     //退出聊天室
@@ -235,9 +234,11 @@
             return;
         }
         //消息发送
-        ws.send(document.getElementById("sendMsg").value);
-        document.getElementById("sendMsg").value = "";
-        document.getElementById("sendMsg").rows = 1;
+        if(document.getElementById("sendMsg").value != "") {
+            ws.send(document.getElementById("sendMsg").value);
+            document.getElementById("sendMsg").value = "";
+            document.getElementById("sendMsg").rows = 1;
+        }
     }
 
     function closeWebSocket() {
@@ -272,8 +273,16 @@
             "                </li>";
         }
 
-        // 自动滚动到文本框最下面
-        textarea.lastElementChild.scrollIntoView({behavior:"smooth"});
+        // 如果页面最下方显示信息为最新信息，则在新的信息插入后，自动滚动到文本框最下面，否则不进行滚动
+        if(Math.abs(scrollTop - maxScrollTop) < 5) {
+            textarea.lastElementChild.scrollIntoView({behavior:"smooth"});
+            setTimeout(function() {
+                scrollTop = document.getElementsByClassName("chat-main")[0].scrollTop;
+                if(scrollTop > maxScrollTop) {
+                    maxScrollTop = scrollTop;
+                }
+            }, 500);
+        }
     }
 
 
@@ -340,6 +349,16 @@
 
         return uuid.join('');
     }
+
+    /**
+     * 监控用户滑动事件，用于更新scrollTop变量
+     */
+    document.addEventListener("touchmove", function(e) {
+        scrollTop = document.getElementsByClassName("chat-main")[0].scrollTop;
+        if(scrollTop > maxScrollTop) {
+            maxScrollTop = scrollTop;
+        }
+    });
 </script>
 </body>
 </html>
