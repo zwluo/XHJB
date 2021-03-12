@@ -1,3 +1,6 @@
+-- 创建数据库
+create database test1 DEFAULT CHARACTER SET utf8;
+
 -- 故事表
 drop table tale;
 create table tale
