@@ -1,8 +1,11 @@
+
+drop database test1;
 -- 创建数据库
 create database test1 DEFAULT CHARACTER SET utf8;
 
+use test1;
 -- 故事表
-drop table tale;
+-- drop table tale;
 create table tale
 (
     id         Int primary key auto_increment comment '编号',
@@ -11,12 +14,12 @@ create table tale
     content    text comment '内容',
     narrator   varchar(20) comment '口述人',
     recorder    varchar(20) comment '搜集人',
-    createdate datetime comment '创建时间',
+    createdate TIMESTAMP comment '创建时间',
     createby   varchar(20) comment '创建人'
 );
 
 -- 访问日志表
-drop table visit_log
+-- drop table visit_log
 create table visit_log
 (
     id         Int primary key auto_increment comment '编号',
@@ -25,7 +28,7 @@ create table visit_log
     response       varchar(50) comment '接口返回',
     ip      varchar(50) comment '访问者IP',
     useragent varchar(1000) comment '访问者设备信息',
-    createdate datetime comment '创建时间' default now(),
+    createdate TIMESTAMP comment '创建时间' default now(),
     createby   varchar(20) comment '创建人' default 'system'
 );
 
