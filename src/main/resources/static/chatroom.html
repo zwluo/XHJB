@@ -179,7 +179,6 @@
     //加入聊天室
     function joinRoom() {
         if (ws) {
-            alert("你已经在聊天室，不能再加入");
             return;
         }
 
@@ -189,8 +188,6 @@
         }
 
         ws = new WebSocket(url + username);
-        //var ws = new WebSocket("wss://echo.websocket.org");
-        //ws = new WebSocket("ws://localhost:8080/test/one");
         //与服务端建立连接触发
         ws.onopen = function () {
             console.log("与服务器成功建立连接")
@@ -199,7 +196,6 @@
         ws.onmessage = function (ev) {
             talking(ev.data);
         };
-
         //发生错误触发
         ws.onerror = function () {
             console.log("连接错误")
@@ -218,8 +214,7 @@
 
     function sendMsg() {
         if(!ws){
-            alert("你已掉线，请重新加入");
-            return;
+            joinRoom();
         }
         //消息发送
         if(document.getElementById("sendMsg").value != "") {
