@@ -159,7 +159,7 @@
         <div class="layer-title">
             聊天室
         </div>
-        <div class="chat-main">
+        <div class="chat-main" onscroll="updateScrollTop()">
             <ul id="content"></ul>
         </div>
         <div class="chat-footer">
@@ -339,12 +339,12 @@
     /**
      * 监控用户滑动事件，用于更新scrollTop变量
      */
-    document.addEventListener("touchmove", function(e) {
+    function updateScrollTop() {
         scrollTop = document.getElementsByClassName("chat-main")[0].scrollTop;
         if(scrollTop > maxScrollTop) {
             maxScrollTop = scrollTop;
         }
-    });
+    }
 </script>
 </body>
 </html>
