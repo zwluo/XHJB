@@ -6,9 +6,7 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @ServerEndpoin 注解声明该类为 WebSocket 的服务端端点
@@ -19,7 +17,7 @@ import java.util.List;
 public class WsByTomcat {
 
     //这里只是简单测试用，真正的场景请考虑线程安全的容器或其它并发解决方案
-    private static final List<Session> sessions = Collections.synchronizedList(new LinkedList<>());
+    private static final Set<Session> sessions = Collections.synchronizedSet(new HashSet<>());
 
     private static final List<String> historyMessage = Collections.synchronizedList(new LinkedList<>());
 
