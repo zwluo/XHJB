@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
     <title>兴化市卷本</title>
+    <link rel="shortcut icon" href="img/home_01.svg"/>
     <style>
         html {
             height: 100%;
@@ -13,7 +14,6 @@
             height: 100%;
             margin: 0;
         }
-
 
         .layer {
             padding: 0;
@@ -55,7 +55,6 @@
             min-height: 68px;
             padding-right: 40px;
         }
-
 
         .chat-mine .chat-user {
             left: auto;
@@ -131,8 +130,6 @@
             outline: none;
         }
 
-
-
         ul {
             padding: 15px 15px 5px;
             margin-bottom: 0px;
@@ -146,6 +143,7 @@
             height: 31px;
             left: 10px;
         }
+
         i {
             font-style: normal;
             font-size: 15px;
@@ -155,23 +153,15 @@
 </head>
 <body onload="joinRoom()">
     <div class="layer">
-
         <div id="responsive_menu_logo" onclick="redirectToTale()">
             <img src="img/undo.png" height="100%">
         </div>
-
         <div class="layer-title">
             聊天室
         </div>
-
         <div class="chat-main">
-            <ul id="content">
-
-
-
-            </ul>
+            <ul id="content"></ul>
         </div>
-
         <div class="chat-footer">
             <textarea id="sendMsg" rows="1" onkeyup="autoResize(this)"></textarea>
             <button type="button" onclick="sendMsg()">发送</button>
@@ -182,9 +172,7 @@
 <script>
     var url = "ws://" + window.location.host + "/page_room/";
     var ws = null;
-
     var username = localStorage.getItem("username");
-
     var scrollTop = 0;
     var maxScrollTop = 0;
 
@@ -274,7 +262,7 @@
         }
 
         // 如果页面最下方显示信息为最新信息，则在新的信息插入后，自动滚动到文本框最下面，否则不进行滚动
-        if(Math.abs(scrollTop - maxScrollTop) < 5) {
+        if(Math.abs(scrollTop - maxScrollTop) < 50) {
             textarea.lastElementChild.scrollIntoView({behavior:"smooth"});
             setTimeout(function() {
                 scrollTop = document.getElementsByClassName("chat-main")[0].scrollTop;
@@ -284,8 +272,6 @@
             }, 500);
         }
     }
-
-
 
     //工具方法,自适应textarea
     // 最小高度

@@ -6,7 +6,8 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -18,7 +19,9 @@ import java.util.List;
 public class WsByTomcat {
 
     //这里只是简单测试用，真正的场景请考虑线程安全的容器或其它并发解决方案
-    private static List<Session> sessions = new ArrayList<>();
+    private static final List<Session> sessions = Collections.synchronizedList(new LinkedList<>());
+
+    private static final List<String> historyMessage = Collections.synchronizedList(new LinkedList<>());
 
     /**
      * @param session  与客户端的会话对象【可选】
@@ -31,6 +34,7 @@ public class WsByTomcat {
     public void OnOpen(Session session, @PathParam("username") String username) throws IOException {
         sessions.add(session);
         //sendTextMsg("好友【" + username + "】加入群聊");
+        sendHistoryMsg(session);
     }
 
     /**
@@ -41,9 +45,8 @@ public class WsByTomcat {
      */
     @OnMessage
     public void OnMsg(String msg, @PathParam("username") String username) throws IOException {
-        sendTextMsg("" + username + ":" + msg);
+        sendTextMsg(username + ":" + msg);
     }
-
 
     /**
      * @OnClose 连接关闭调用
@@ -63,9 +66,48 @@ public class WsByTomcat {
         e.printStackTrace();
     }
 
-    private void sendTextMsg(String msg) {
-        for (Session session : sessions) {
-            session.getAsyncRemote().sendText(msg);
+    /**
+     * 给全体发送消息
+     * @param msg
+     * @throws IOException
+     */
+    private void sendTextMsg(String msg) throws IOException {
+        // 保存历史消息
+        addHistoryMsg(msg);
+
+        synchronized (sessions) {
+            for (Session session : sessions) {
+                // getAsyncRemote是非阻塞式的，getBasicRemote是阻塞式的
+                session.getBasicRemote().sendText(msg);
+            }
+        }
+    }
+
+    /**
+     * 发送历史消息
+     * @param session
+     * @throws IOException
+     */
+    private void sendHistoryMsg(Session session) throws IOException {
+        if (historyMessage.size() > 0) {
+            synchronized (historyMessage) {
+                for (String msg : historyMessage) {
+                    session.getBasicRemote().sendText(msg);
+                }
+            }
+        }
+    }
+
+    /**
+     * 保存历史消息
+     * @param msg
+     */
+    private void addHistoryMsg(String msg) {
+        historyMessage.add(msg);
+
+        // 只显示最近的10条
+        if (historyMessage.size() > 10) {
+            historyMessage.remove(0);
         }
     }
 }
