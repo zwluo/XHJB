@@ -163,32 +163,42 @@
             <ul id="content"></ul>
         </div>
         <div class="chat-footer">
-            <textarea id="sendMsg" rows="1" onkeyup="autoResize(this)"></textarea>
+            <textarea id="sendMsg" rows="1" onkeyup="autoResize(this)" onfocus="textOnfocus()"></textarea>
             <button type="button" onclick="sendMsg()">发送</button>
         </div>
-
     </div>
-
 <script>
+    // WebSocket后台连接地址
     var url = "ws://" + window.location.host + "/page_room/";
+    // WebSocket客户端
     var ws = null;
+    // 用户名称，随机数
     var username = localStorage.getItem("username");
+    // 当前滚动高度，用于判断是否需要滚动到最新消息
     var scrollTop = 0;
+    // 最大滚动高度，用于判断是否需要滚动到最新消息
     var maxScrollTop = 0;
+    // 手机键盘是否为弹出状态
+    var isShowKeyboard = false;
 
-    //加入聊天室
+    /**
+     * 加入聊天室
+     */
     function joinRoom() {
+        // 如果已经建立连接，跳过
         if (ws) {
             return;
         }
 
         if (username == null) {
-            username = Math.floor(Math.random() * 10000) + 1;//uuid();    // 可均衡获取 0 到 9 的随机整数。
+            username = Math.floor(Math.random() * 10000) + 1;// 可均衡获取 1 到 10000 的随机整数。
             localStorage.setItem("username", username);
         }
 
         ws = new WebSocket(url + username);
-        //与服务端建立连接触发
+
+        //与服务端建立连接触发，下面4个都是回调函数，比如前端调用了ws.send()方法，后台会执行对应的OnMsg()方法，
+        // 然后前端就会执行ws.onmessage()这个回调函数
         ws.onopen = function () {
             console.log("与服务器成功建立连接")
         };
@@ -207,18 +217,27 @@
         };
     }
 
-    //退出聊天室
+    /**
+     * 退出聊天室
+     */
     function exitRoom() {
         closeWebSocket();
     }
 
+    /**
+     * 向后台发送消息
+     */
     function sendMsg() {
+        // 如果断开连接了，那么重新连接
         if(!ws){
             joinRoom();
         }
         //消息发送
         if(document.getElementById("sendMsg").value != "") {
+
             ws.send(document.getElementById("sendMsg").value);
+
+            // 清空文本输入框
             document.getElementById("sendMsg").value = "";
             document.getElementById("sendMsg").rows = 1;
         }
@@ -231,7 +250,16 @@
         }
     }
 
+    /**
+     * 展示后台发送过来的消息
+     */
     function talking(content) {
+        // 在键盘消失后，scrollTop会恢复为正常值，但maxScrollTop不会，所以需要手动修改
+        if(isShowKeyboard && scrollTop < maxScrollTop) {
+            maxScrollTop = scrollTop;
+            isShowKeyboard = false;
+        }
+
         const textarea = document.getElementById('content');
 
         var date = new Date();
@@ -256,9 +284,11 @@
             "                </li>";
         }
 
-        // 如果页面最下方显示信息为最新信息，则在新的信息插入后，自动滚动到文本框最下面，否则不进行滚动
+        // 如果页面最下方显示信息为最新信息，那么后面一直自动滚动展示最新的信息，否则页面不做滚动
         if(Math.abs(scrollTop - maxScrollTop) < 50) {
             textarea.lastElementChild.scrollIntoView({behavior:"smooth"});
+
+            // 因为新消息展示设置了平滑滚动，所以在给maxScrollTop赋值之前，需要等待0.5秒
             setTimeout(function() {
                 scrollTop = document.getElementsByClassName("chat-main")[0].scrollTop;
                 if(scrollTop > maxScrollTop) {
@@ -268,11 +298,14 @@
         }
     }
 
-    //工具方法,自适应textarea
     // 最小高度
     var minRows = 1;
     // 最大高度，超过则出现滚动条
     var maxRows = 4;
+
+    /**
+     * 工具方法,textarea根据输入文本长度自适应高度
+     */
     function autoResize(t) {
         if (t.scrollTop == 0) t.scrollTop = 1;
         while (t.scrollTop == 0) {
@@ -300,6 +333,9 @@
         }
     }
 
+    /**
+     * 返回到故事页面
+     */
     function redirectToTale() {
         window.location.href = "http://" + window.location.host + "/index.html";
     }
@@ -311,16 +347,11 @@
     function uuid() {
         var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
         var uuid = [], i;
-
-        // rfc4122, version 4 form
         var r;
 
-        // rfc4122 requires these characters
         uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
         uuid[14] = '4';
 
-        // Fill in random data.  At i==19 set the high bits of clock sequence as
-        // per rfc4122, sec. 4.1.5
         for (i = 0; i < 36; i++) {
             if (!uuid[i]) {
                 r = 0 | Math.random() * 16;
@@ -340,6 +371,35 @@
             maxScrollTop = scrollTop;
         }
     }
+
+    /**
+     * 监控输入框的聚焦事件
+     * 功能：在键盘弹出后，键盘会遮盖住下方的消息，现在需要将最下方的消息滚动到页面中央
+     */
+    function textOnfocus() {
+        isShowKeyboard = true;
+        // 键盘的弹出需要一定的时间，所以滚动也要相应的延迟
+        if(document.getElementById('content').lastElementChild != null) {
+            setTimeout(function(){
+                document.getElementById('content').lastElementChild.scrollIntoView({behavior:"smooth"});
+            },300);
+        }
+    }
+
+    /**
+     * 监听手机键盘消失事件
+     * 功能：键盘隐藏后，将maxScrollTop设置为键盘弹出之前的值
+     */
+    document.getElementById("sendMsg").addEventListener("focusout", function () {
+        setTimeout(function () {
+            // 在键盘消失后，scrollTop会自动恢复为正常值，但maxScrollTop不会，所以需要手动修改
+            if(isShowKeyboard && scrollTop < maxScrollTop) {
+                maxScrollTop = scrollTop;
+                isShowKeyboard = false;
+            }
+        }, 300);
+    })
+
 </script>
 </body>
 </html>
