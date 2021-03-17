@@ -400,12 +400,18 @@
         }, 300);
     });
 
-    document.addEventListener("visibilitychange", function() {
-        if(ws != null) {
+    document.addEventListener('visibilitychange', function () {
+        // 用户息屏、或者切到后台运行 （离开页面）
+        if (document.visibilityState === 'hidden') {
             document.getElementById('content').innerHTML = "";
             maxScrollTop = 0;
-            closeWebSocket();
-        } else {
+            if (ws != null) {
+                closeWebSocket();
+            }
+        }
+
+        // 用户打开或回到页面
+        if (document.visibilityState === 'visible' && ws == null) {
             joinRoom();
         }
     });
