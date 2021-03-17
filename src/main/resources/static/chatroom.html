@@ -398,7 +398,17 @@
                 isShowKeyboard = false;
             }
         }, 300);
-    })
+    });
+
+    document.addEventListener("visibilitychange", function() {
+        if(ws != null) {
+            document.getElementById('content').innerHTML = "";
+            maxScrollTop = 0;
+            closeWebSocket();
+        } else {
+            joinRoom();
+        }
+    });
 
 </script>
 </body>

@@ -103,8 +103,8 @@ public class WsByTomcat {
     private void addHistoryMsg(String msg) {
         historyMessage.add(msg);
 
-        // 只显示最近的10条
-        if (historyMessage.size() > 10) {
+        // 只显示最近的20条
+        if (historyMessage.size() > 20) {
             historyMessage.remove(0);
         }
     }
