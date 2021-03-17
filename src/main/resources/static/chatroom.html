@@ -382,7 +382,7 @@
         if(document.getElementById('content').lastElementChild != null) {
             setTimeout(function(){
                 document.getElementById('content').lastElementChild.scrollIntoView({behavior:"smooth"});
-            },300);
+            },500);
         }
     }
 
@@ -397,7 +397,7 @@
                 maxScrollTop = scrollTop;
                 isShowKeyboard = false;
             }
-        }, 300);
+        }, 500);
     });
 
     document.addEventListener('visibilitychange', function () {
