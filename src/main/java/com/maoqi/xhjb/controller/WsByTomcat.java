@@ -43,7 +43,7 @@ public class WsByTomcat {
      */
     @OnMessage
     public void OnMsg(String msg, @PathParam("username") String username) throws IOException {
-        sendTextMsg(username + ":" + msg);
+        sendTextMsg(username + "&" + msg);
     }
 
     /**

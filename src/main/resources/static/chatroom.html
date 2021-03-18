@@ -236,8 +236,9 @@
         }
         //消息发送
         if(document.getElementById("sendMsg").value != "") {
-
-            ws.send(document.getElementById("sendMsg").value);
+            var date = new Date();
+            var timeStr = (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes();
+            ws.send(document.getElementById("sendMsg").value + "&" + timeStr);
 
             // 清空文本输入框
             document.getElementById("sendMsg").value = "";
@@ -264,24 +265,24 @@
 
         const textarea = document.getElementById('content');
 
-        var date = new Date();
-        if (username == content.split(":")[0]) {
+        var msgInfos = content.split("&");
+        if (username == msgInfos[0]) {
             textarea.innerHTML = textarea.innerHTML +
                 "<li class=\"chat-mine\"><div class=\"chat-user\"><i>" +
-                (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() +
+                msgInfos[2] +
                 "</i>【" +
-                content.split(":")[0]+
+                msgInfos[0]+
                 "】</div><div class=\"chat-text\">\n" +
-                content.split(":")[1] +
+                msgInfos[1] +
                 "</div></li>";
         } else {
             textarea.innerHTML = textarea.innerHTML +
                 "<li><div class=\"chat-user\">【" +
-                content.split(":")[0]+
+                msgInfos[0]+
                 "】<i>" +
-                (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() +
+                msgInfos[2] +
                 "</i></div><div class=\"chat-text\">\n" +
-                content.split(":")[1] +
+                msgInfos[1] +
             "                    </div>\n" +
             "                </li>";
         }
