@@ -93,15 +93,39 @@
                     </div>
 
                     <a class="menuitem supernav" data-tooltip-type="selector"
-                       data-tooltip-content=".submenu_store9">丹 麦</a>
-                    <div class="submenu_store9" style="display: none;"  data-submenuid="丹麦">
+                       data-tooltip-content=".submenu_store9">瑞 典</a>
+                    <div class="submenu_store9" style="display: none;"  data-submenuid="瑞典">
                         <a class="submenuitem" :id="column.id" @click="getData(column.id, $event)" v-for="column in columns9">{{column.title}}</a>
                     </div>
 
                     <a class="menuitem supernav" data-tooltip-type="selector"
-                       data-tooltip-content=".submenu_store10">瑞 典</a>
-                    <div class="submenu_store10" style="display: none;"  data-submenuid="瑞典">
+                       data-tooltip-content=".submenu_store10">芬 兰</a>
+                    <div class="submenu_store10" style="display: none;"  data-submenuid="芬兰">
                         <a class="submenuitem" :id="column.id" @click="getData(column.id, $event)" v-for="column in columns10">{{column.title}}</a>
+                    </div>
+
+                    <a class="menuitem supernav" data-tooltip-type="selector"
+                       data-tooltip-content=".submenu_store11">丹 麦</a>
+                    <div class="submenu_store11" style="display: none;"  data-submenuid="丹麦">
+                        <a class="submenuitem" :id="column.id" @click="getData(column.id, $event)" v-for="column in columns11">{{column.title}}</a>
+                    </div>
+
+                    <a class="menuitem supernav" data-tooltip-type="selector"
+                       data-tooltip-content=".submenu_store12">冰 岛</a>
+                    <div class="submenu_store12" style="display: none;"  data-submenuid="冰岛">
+                        <a class="submenuitem" :id="column.id" @click="getData(column.id, $event)" v-for="column in columns12">{{column.title}}</a>
+                    </div>
+
+                    <a class="menuitem supernav" data-tooltip-type="selector"
+                       data-tooltip-content=".submenu_store13">拉普兰岛</a>
+                    <div class="submenu_store13" style="display: none;"  data-submenuid="拉普兰岛">
+                        <a class="submenuitem" :id="column.id" @click="getData(column.id, $event)" v-for="column in columns13">{{column.title}}</a>
+                    </div>
+
+                    <a class="menuitem supernav" data-tooltip-type="selector"
+                       data-tooltip-content=".submenu_store14">法罗岛</a>
+                    <div class="submenu_store14" style="display: none;"  data-submenuid="法罗岛">
+                        <a class="submenuitem" :id="column.id" @click="getData(column.id, $event)" v-for="column in columns14">{{column.title}}</a>
                     </div>
                 </div>
             </div>
@@ -125,7 +149,7 @@
             <!-- 主界面具体展示内容 -->
             <p v-for="paragraph in paragraphs">{{paragraph}}</p>
 
-            <div v-if="type == '谚语' || type == '关于本书' || type == '挪威' || type == '丹麦' || type == '瑞典'">
+            <div v-if="type == '谚语' || type == '关于本书' || type == '挪威' || type == '瑞典' || type == '芬兰' || type == '丹麦' || type == '冰岛' || type == '拉普兰岛' || type == '法罗岛'">
 
             </div>
 
@@ -168,6 +192,10 @@
             columns8: [id = '', title = ''],
             columns9: [id = '', title = ''],
             columns10: [id = '', title = ''],
+            columns11: [id = '', title = ''],
+            columns12: [id = '', title = ''],
+            columns13: [id = '', title = ''],
+            columns14: [id = '', title = ''],
             timer: '',
             counter: 0,
             fontSize: 20,
@@ -215,8 +243,12 @@
             this.getMyth('谚语');
             this.getMyth('关于本书');
             this.getMyth('挪威');
-            this.getMyth('丹麦');
             this.getMyth('瑞典');
+            this.getMyth('芬兰');
+            this.getMyth('丹麦');
+            this.getMyth('冰岛');
+            this.getMyth('拉普兰岛');
+            this.getMyth('法罗岛');
             this.getCounter();
         },
         methods: {
@@ -292,10 +324,18 @@
                                 that.columns6 = response.data;
                             } else if ("挪威" == type) {
                                 that.columns8 = response.data;
-                            } else if ("丹麦" == type) {
-                                that.columns9 = response.data;
                             } else if ("瑞典" == type) {
+                                that.columns9 = response.data;
+                            } else if ("芬兰" == type) {
                                 that.columns10 = response.data;
+                            } else if ("丹麦" == type) {
+                                that.columns11 = response.data;
+                            } else if ("冰岛" == type) {
+                                that.columns12 = response.data;
+                            } else if ("拉普兰岛" == type) {
+                                that.columns13 = response.data;
+                            } else if ("法罗岛" == type) {
+                                that.columns14 = response.data;
                             }
                         } else {
                             alert('访问错误,请检查网络');

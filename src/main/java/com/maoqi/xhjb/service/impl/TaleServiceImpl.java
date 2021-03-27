@@ -395,7 +395,8 @@ public class TaleServiceImpl implements TaleService {
                 }
 
                 // 故事类别
-                if ("挪威".equals(line) || "丹麦".equals(line) || "瑞典".equals(line)) {
+                if ("挪威".equals(line) || "瑞典".equals(line) || "芬兰".equals(line)
+                        || "丹麦".equals(line) || "冰岛".equals(line) || "拉普兰岛".equals(line) || "法罗岛".equals(line)) {
                     type = line;
                 } else {
                     // 如果isTitle为true，表示当前行是标题
