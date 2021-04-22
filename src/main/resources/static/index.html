@@ -79,7 +79,7 @@
 
                     <a class="menuitem" style="border-bottom: 0px;" @click="redirectToChatRoom()">当前在线人数：{{counter}}</a>
 
-                    <div style="height:150px;"></div>
+                    <div style="height:150px;border-bottom: 1px solid #000000;"></div>
 
 
                     <div style="text-align: center;">
@@ -127,6 +127,7 @@
                     <div class="submenu_store14" style="display: none;"  data-submenuid="法罗岛">
                         <a class="submenuitem" :id="column.id" @click="getData(column.id, $event)" v-for="column in columns14">{{column.title}}</a>
                     </div>
+                    <div style="height:100px;border-top: 1px solid #585b63;"></div>
                 </div>
             </div>
         </div>
