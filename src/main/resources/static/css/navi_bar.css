@@ -147,6 +147,7 @@ html.responsive body {
     color: #dadada;
     background: #393D49;
     transition: background 0.25s, color 0.25s;
+    text-shadow: 3px 3px 2px rgb(0 0 0);
 }
 
 .mainmenu_contents .menuitem.username {
