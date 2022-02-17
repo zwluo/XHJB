@@ -17,3 +17,5 @@
 项目访问地址：http://xhjb.frp.freefrp.net/
 
 PS.因为使用的freefrp的免费内网穿透，没有固定的服务器和域名，所以基本上访问不了。
+
+增加了微信小程序, 直接搜索"兴化市卷本"就可以访问[xhjb小程序源码.zip](https://github.com/zwluo/XHJB/files/8086476/xhjb.zip)
